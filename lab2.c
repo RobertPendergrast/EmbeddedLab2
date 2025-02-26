@@ -140,6 +140,7 @@ int main()
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
     if (transferred == sizeof(packet)) {
+      printf("pressed\n");
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
         if(packet.keycode[i] == 0){
@@ -178,9 +179,6 @@ int main()
         held_mod = packet.modifiers;
       }
       prev = packet;
-      if (packet.keycode[0] == 0x29) { /* ESC pressed? */
-	      break;
-      }
       fbputs(" ", cursor_row, cursor_col);
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
