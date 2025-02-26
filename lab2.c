@@ -39,6 +39,30 @@ uint8_t endpoint_address;
 
 pthread_t network_thread;
 void *network_thread_f(void *);
+void execute_key(uint8_t key, uint8_t modifiers, int position, String & message);
+// USB HID Keyboard scancode to ASCII mapping
+static const char keycode_to_ascii[128] = {
+    0,   0,   0,   0,  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',  // 0x00-0x0F
+    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2',  // 0x10-0x1F
+    '3', '4', '5', '6', '7', '8', '9', '0', '\n', 0,   0,   0,   ' ', '-', '=', '[',  // 0x20-0x2F
+    ']', '\\', 0,  ';', '\'', '`', ',', '.', '/',  0,   0,   0,   0,   0,   0,   0,   // 0x30-0x3F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x40-0x4F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x50-0x5F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x60-0x6F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0    // 0x70-0x7F
+};
+
+// Shift key modifier for special characters
+static const char keycode_to_ascii_shift[128] = {
+    0,   0,   0,   0,  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',  // 0x00-0x0F
+    'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '!', '@',  // 0x10-0x1F
+    '#', '$', '%', '^', '&', '*', '(', ')', '\n', 0,   0,   0,   ' ', '_', '+', '{',  // 0x20-0x2F
+    '}', '|', 0,  ':', '"', '~', '<', '>', '?',  0,   0,   0,   0,   0,   0,   0,   // 0x30-0x3F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x40-0x4F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x50-0x5F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x60-0x6F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0    // 0x70-0x7F
+};
 
 int main()
 {
@@ -104,7 +128,10 @@ int main()
 
   int cursor_row = 18;
   int cursor_col = 0;
-
+  uint8_t held_char = 0;
+  uint8_t held_mod = 0;
+  packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
+  uint8_t held_count = 0; 
   /* Look for and handle keypresses */
   for (;;) {
     fbputs("_",cursor_row,cursor_col);
@@ -112,12 +139,52 @@ int main()
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
     if (transferred == sizeof(packet)) {
+      uint8_t rightmost = 0;
+      for(int i = 0; i < 6; i++){
+        if(packet.keycode[i] == 0){
+          break;
+        }
+        rightmost = i;
+      }
+      if(rightmost == 0){
+        held_char = 0;
+        hend_mod = 0;
+        continue;
+      }
+      if(rightmost == held_char && packet.modifiers == held_mod){
+        if(held_count < HOLD_COUNT){
+          held_count++;
+          continue;
+        }
+        execute_key(rightmost, packet.modifiers);
+        cursor_col++;
+        continue;
+      }
+      uint8_t new = 1;
+      for(int i = 0; i < 6; i++){
+        if(packet.keycode[i] == 0){
+          break;
+        }
+        if(prev.keycode[i] == rightmost){
+          new = 0;
+          break;
+        }
+      }
+      if(new){
+        execute_key(rightmost, packet.modifiers);
+        cursor_col++;
+        held_char = rightmost;
+        held_mod = packet.modifiers;
+      }
+      prev = packet;
+      if (packet.keycode[0] == 0x29) { /* ESC pressed? */
+	      break;
+      }
       fbputs(" ", cursor_row, cursor_col);
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("%s\n", keystate); //prints the keystate
       fbputs(keystate, 6, 0); //places the keystate onto the screen
-      cursor_col++;
       fbputs("",cursor_row,cursor_col-1);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
@@ -133,7 +200,9 @@ int main()
 
   return 0;
 }
-
+void execute_key(uint8_t key, uint8_t modifiers, int position, String & message){
+  return;
+}
 void *network_thread_f(void *ignored)
 {
   char recvBuf[BUFFER_SIZE];
