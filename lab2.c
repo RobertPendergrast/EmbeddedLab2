@@ -93,6 +93,10 @@ int main()
   //Testing the drawline and clear screen functions
   clearscreen();
   drawline(17);
+  sleep(3);
+  clearline(17);
+  sleep(3);
+  drawline(17);
 
 
   /* Open the keyboard */
@@ -128,6 +132,7 @@ int main()
   int cursor_row = 18;
   int cursor_col = 0;
   struct usb_keyboard_packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
+  int cursor_pos = 0
   char message[BUFFER_SIZE];
   /* Look for and handle keypresses */
   for (;;) {
@@ -138,7 +143,7 @@ int main()
 			      &transferred, 0);
     if (transferred == sizeof(packet)) {
       fbputs(" ", cursor_row, cursor_col);
-      //Checking for the rightmost key pressed 
+      //Checking for the rightmost key pressed, as that is the only one we may want to send.
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
         if(packet.keycode[i] == 0){
@@ -146,34 +151,45 @@ int main()
         }
         rightmost = i+1;
       }
-      
+      //If no key is pressed, we skip the rest of the loop
       if(rightmost == 0){
-        prev = packet;
-        continue;
-      }
-      rightmost-=1;
-      uint8_t new = 1;
-      for(int i = 0; i < 6; i++){
-        if(packet.keycode[i] == 0){
-          break;
+        //decrementing the rightmost key to get the last key pressed
+        rightmost-=1;
+
+        //Checking if the key is new, or if it was one that was held before the most recent key was pressed
+        uint8_t new = 1;
+        for(int i = 0; i < 6; i++){
+          if(packet.keycode[i] == 0){
+            break;
+          }
+          if(prev.keycode[i] == packet.keycode[rightmost]){
+            new = 0;
+            break;
+          }
         }
-        if(prev.keycode[i] == packet.keycode[rightmost]){
-          new = 0;
-          break;
+        
+        if(new == 1){
+          // //Checking for left and right arrows
+          // if(packet.keycode[rightmost] == 0x50){
+          //   if(cursor_pos > 0){
+          //     cursor_pos--;
+          //     cursor_col--;
+          //   }
+          // }
+          // else if(packet.keycode[rightmost] == )
+          execute_key(rightmost, packet.modifiers, 0, message);
+          cursor_col++;
         }
       }
+
       
-      if(new == 1){
-        execute_key(rightmost, packet.modifiers, 0, message);
-        cursor_col++;
-      }
       prev = packet;
       fbputs(" ", cursor_row, cursor_col);
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("%s\n", keystate); //prints the keystate
       fbputs(keystate, 6, 0); //places the keystate onto the screen
-      fbputs(" ",cursor_row,cursor_col-1);
+      fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	      break;
       }

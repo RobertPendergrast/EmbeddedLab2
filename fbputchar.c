@@ -111,6 +111,12 @@ void drawline(int row){
   }
 }
 
+void clearline(int row){
+  for (int col = 0 ; col < 64 ; col++) {
+    fbputchar(' ', row, col,255,0,255);
+  }
+}
+
 /*
   Function to clear the screen.
   Iterate through the frame buffer and erase all the memory
