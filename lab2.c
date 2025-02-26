@@ -138,7 +138,7 @@ int main()
 			      &transferred, 0);
     if (transferred == sizeof(packet)) {
       fbputs(" ", cursor_row, cursor_col);
-      printf("pressed\n");
+      //Checking for the rightmost key pressed 
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
         if(packet.keycode[i] == 0){
@@ -148,6 +148,7 @@ int main()
       }
       
       if(rightmost == 0){
+        prev = packet;
         continue;
       }
       rightmost-=1;
@@ -161,6 +162,7 @@ int main()
           break;
         }
       }
+      
       if(new == 1){
         execute_key(rightmost, packet.modifiers, 0, message);
         cursor_col++;
