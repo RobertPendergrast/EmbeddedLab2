@@ -132,11 +132,11 @@ int main()
   int cursor_row = 18;
   int cursor_col = 0;
   struct usb_keyboard_packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
-  int cursor_pos = 0
+  int cursor_pos = 0;
   char message[BUFFER_SIZE];
   /* Look for and handle keypresses */
 
-  /
+  
   for (;;) {
 
     fbputs("_",cursor_row,cursor_col);
