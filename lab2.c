@@ -159,7 +159,7 @@ int main()
         if(held_count < HOLD_COUNT){
           held_count++;
           
-          printf("continue 1\n");
+          printf("continue 2\n");
           continue;
         }
         execute_key(rightmost, packet.modifiers, 0, message);
