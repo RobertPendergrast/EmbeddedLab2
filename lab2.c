@@ -59,8 +59,8 @@ int main()
 
   //Turn this into the draw line function?
   for (col = 0 ; col < 64 ; col++) {
-    fbputchar('*', 0, col);
-    fbputchar('*', 23, col);
+    fbputchar('*', 0, col,255,0,255);
+    fbputchar('*', 23, col,255,0,255);
   }
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
@@ -111,8 +111,8 @@ int main()
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      printf("%s\n", keystate);
-      fbputs(keystate, 6, 0);
+      printf("%s\n", keystate); //prints the keystate
+      fbputs(keystate, 6, 0); //places the keystate onto the scren
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
