@@ -21,6 +21,7 @@
 #define SERVER_HOST "128.59.19.114"
 #define SERVER_PORT 42000
 
+#define HOLD_COUNT 50
 #define BUFFER_SIZE 128
 
 /*
@@ -39,7 +40,7 @@ uint8_t endpoint_address;
 
 pthread_t network_thread;
 void *network_thread_f(void *);
-void execute_key(uint8_t key, uint8_t modifiers, int position, String & message);
+void execute_key(uint8_t key, uint8_t modifiers, int position, char * message);
 // USB HID Keyboard scancode to ASCII mapping
 static const char keycode_to_ascii[128] = {
     0,   0,   0,   0,  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',  // 0x00-0x0F
@@ -88,9 +89,7 @@ int main()
   }
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
-
-  sleep(5); //pause for 5 seconds
-
+  
   //Testing the drawline and clear screen functions
   clearscreen();
   drawline(17);
@@ -132,8 +131,10 @@ int main()
   uint8_t held_mod = 0;
   packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
   uint8_t held_count = 0; 
+  char message[BUFFER_SIZE];
   /* Look for and handle keypresses */
   for (;;) {
+
     fbputs("_",cursor_row,cursor_col);
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
@@ -148,7 +149,7 @@ int main()
       }
       if(rightmost == 0){
         held_char = 0;
-        hend_mod = 0;
+        held_mod = 0;
         continue;
       }
       if(rightmost == held_char && packet.modifiers == held_mod){
@@ -156,7 +157,7 @@ int main()
           held_count++;
           continue;
         }
-        execute_key(rightmost, packet.modifiers);
+        execute_key(rightmost, packet.modifiers, 0, message);
         cursor_col++;
         continue;
       }
@@ -171,7 +172,7 @@ int main()
         }
       }
       if(new){
-        execute_key(rightmost, packet.modifiers);
+        execute_key(rightmost, packet.modifiers, 0, message);
         cursor_col++;
         held_char = rightmost;
         held_mod = packet.modifiers;
@@ -200,7 +201,7 @@ int main()
 
   return 0;
 }
-void execute_key(uint8_t key, uint8_t modifiers, int position, String & message){
+void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
   return;
 }
 void *network_thread_f(void *ignored)
