@@ -137,6 +137,7 @@ int main()
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
     if (transferred == sizeof(packet)) {
+      fbputs(" ", cursor_row, cursor_col);
       printf("pressed\n");
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
@@ -147,8 +148,6 @@ int main()
       }
       
       if(rightmost == 0){
-        held_char = 0;
-        held_mod = 0;
         continue;
       }
       rightmost-=1;
@@ -157,16 +156,14 @@ int main()
         if(packet.keycode[i] == 0){
           break;
         }
-        if(prev.keycode[i] == rightmost){
+        if(prev.keycode[i] == packet.keycode[rightmost]){
           new = 0;
           break;
         }
       }
-      if(new){
+      if(new == 1){
         execute_key(rightmost, packet.modifiers, 0, message);
         cursor_col++;
-        held_char = rightmost;
-        held_mod = packet.modifiers;
       }
       prev = packet;
       fbputs(" ", cursor_row, cursor_col);
