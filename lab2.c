@@ -65,7 +65,7 @@ int main()
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
 
-  sleep(10000);
+  //sleep(10000);
 
 
   //Testing the drawline and clear screen functions
