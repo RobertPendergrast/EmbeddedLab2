@@ -2,7 +2,7 @@
  *
  * CSEE 4840 Lab 2 for 2019
  *
- * Name/UNI: Please Changeto Yourname (pcy2301)
+ * Name/UNI: Robert Pendergrast, Moises Mata, Isaac Trost
  */
 #include "fbputchar.h"
 #include <stdio.h>
@@ -67,7 +67,6 @@ int main()
 
   sleep(5); //pause for 5 seconds
 
-
   //Testing the drawline and clear screen functions
   clearscreen();
   drawline(17);
@@ -103,6 +102,9 @@ int main()
   /* Start the network thread */
   pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
+  int cursor_row = 18;
+  int cursor_col = 0;
+
   /* Look for and handle keypresses */
   for (;;) {
     libusb_interrupt_transfer(keyboard, endpoint_address,
@@ -112,7 +114,8 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("%s\n", keystate); //prints the keystate
-      fbputs(keystate, 6, 0); //places the keystate onto the scren
+      fbputs(keystate, 6, 0); //places the keystate onto the screen
+      fbputs("_",cursor_row,cursor_col);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
@@ -136,7 +139,7 @@ void *network_thread_f(void *ignored)
   while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
     recvBuf[n] = '\0';
     printf("%s", recvBuf);
-    fbputs(recvBuf, 18, 0); //changed the row to below the line 
+    fbputs(recvBuf, 0, 0); //changed the row to below the line 
   }
 
   return NULL;
