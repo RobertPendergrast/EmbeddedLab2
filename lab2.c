@@ -129,7 +129,7 @@ int main()
   int cursor_col = 0;
   uint8_t held_char = 0;
   uint8_t held_mod = 0;
-  packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
+  struct usb_keyboard_packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
   uint8_t held_count = 0; 
   char message[BUFFER_SIZE];
   /* Look for and handle keypresses */
