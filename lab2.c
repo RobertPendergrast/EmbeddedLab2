@@ -157,19 +157,6 @@ int main()
         continue;
       }
       rightmost-=1;
-
-      if(rightmost == held_char && packet.modifiers == held_mod){
-        if(held_count < HOLD_COUNT){
-          held_count++;                       
-          
-          printf("continue 2\n");
-          continue;
-        }
-        execute_key(rightmost, packet.modifiers, 0, message);
-        cursor_col++;
-        printf("continue 3\n");
-        continue;
-      }
       uint8_t new = 1;
       for(int i = 0; i < 6; i++){
         if(packet.keycode[i] == 0){
