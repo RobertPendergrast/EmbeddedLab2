@@ -116,12 +116,13 @@ void drawline(int row){
   Iterate through the frame buffer and erase all the memory
 */
 void clearscreen(){
-  int x = 0;
-  while(x < sizeof(&framebuffer)){
-    framebuffer[x] = 0;
-    x++;
+  char * x = framebuffer;
+  int i = 0;
+  while(i < fb_finfo.smem_len){
+    &x = 0;
+    x ++; 
   }
-  printf("Memory Cleared");
+  printf("Framebuffer Cleared\n");
 }
 
 
