@@ -119,7 +119,7 @@ void clearscreen(){
   unsigned char *x = framebuffer;
   int i = 0;
   while(i < fb_finfo.smem_len){
-    x[i] = 0;
+    x[i++] = 0;
   }
   printf("Framebuffer Cleared\n");
 }
