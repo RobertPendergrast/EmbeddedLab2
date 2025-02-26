@@ -114,13 +114,13 @@ void drawline(int row){
   Function to clear the screen.
   Iterate through the frame buffer and erase all the memory
 */
-
 void clearscreen(){
   int x = 0;
   while(x < sizeof(&framebuffer)){
     framebuffer[x] = 0;
     x++;
   }
+  printf("Memory Cleared");
 }
 
 
