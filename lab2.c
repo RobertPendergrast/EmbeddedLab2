@@ -184,7 +184,7 @@ int main()
               cursor_col++;
             }
           }
-          else if(packet.keycode[rightmos] == 0x28 && packet.modifiers == 0){
+          else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
             //send the message
           }
           else{
