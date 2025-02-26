@@ -20,7 +20,7 @@
 /* arthur.cs.columbia.edu */
 #define SERVER_HOST "128.59.19.114"
 #define SERVER_PORT 42000
-
+#define SHIFT 2
 #define HOLD_COUNT 50
 #define BUFFER_SIZE 128
 
@@ -91,11 +91,7 @@ int main()
   fbputs("Hello CSEE 4840 World!", 4, 10);
   
   //Testing the drawline and clear screen functions
-  clearscreen();
-  drawline(17);
-  sleep(3);
-  clearline(17);
-  sleep(3);
+  clearscreen();   
   drawline(17);
 
 
@@ -154,7 +150,7 @@ int main()
         rightmost = i+1;
       }
       //If no key is pressed, we skip the rest of the loop
-      if(rightmost == 0){
+      if(rightmost != 0){
         //decrementing the rightmost key to get the last key pressed
         rightmost-=1;
 
@@ -220,7 +216,37 @@ int main()
   return 0;
 }
 void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
-  return;
+  //Dealing with backspace
+  if(key == 0x2A){
+    if(position > 0){
+      for(int i = position; i < strlen(message); i++){
+        message[i-1] = message[i];
+      }
+      message[strlen(message)-1] = '\0';
+      position--;
+    }
+    return;
+  }
+  //everything else
+  if(modifiers == 0){
+    if(keycode_to_ascii[key] != 0){
+      //Shift everything after position down
+      for(int i = strlen(message); i > position; i--){
+        message[i] = message[i-1];
+      }
+      message[position] = keycode_to_ascii[key];
+    }
+  }
+  else if(modifiers == SHIFT){
+    if(keycode_to_ascii_shift[key] != 0){
+      //Shift everything after position down
+      for(int i = strlen(message); i > position; i--){
+        message[i] = message[i-1];
+      }
+      message[position] = keycode_to_ascii_shift[key];
+    }
+  }
+  message[position+1] = '\0';
 }
 void *network_thread_f(void *ignored)
 {
