@@ -144,6 +144,7 @@ int main()
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
         if(packet.keycode[i] == 0){
+          printf("break 1\n");
           break;
         }
         rightmost = i;
@@ -151,24 +152,30 @@ int main()
       if(rightmost == 0){
         held_char = 0;
         held_mod = 0;
+        printf("continue 1\n");
         continue;
       }
       if(rightmost == held_char && packet.modifiers == held_mod){
         if(held_count < HOLD_COUNT){
           held_count++;
+          
+          printf("continue 1\n");
           continue;
         }
         execute_key(rightmost, packet.modifiers, 0, message);
         cursor_col++;
+        printf("continue 3\n");
         continue;
       }
       uint8_t new = 1;
       for(int i = 0; i < 6; i++){
         if(packet.keycode[i] == 0){
+          printf("break 2\n");
           break;
         }
         if(prev.keycode[i] == rightmost){
           new = 0;
+          printf("break 3\n");
           break;
         }
       }
@@ -186,7 +193,7 @@ int main()
       fbputs(keystate, 6, 0); //places the keystate onto the screen
       fbputs("",cursor_row,cursor_col-1);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
-	break;
+	      break;
       }
     }
   }
