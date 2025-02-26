@@ -114,16 +114,15 @@ void drawline(int row){
   Function to clear the screen.
   Iterate through the frame buffer and erase all the memory
 */
-/*
+
 void clearscreen(){
-  //Pixel is a pointer to the framebuffer
-  unsigned char *pixel = framebuffer;
-  while (&pixel != '\0'){
-    &pixel = 0;
-    pixel++; 
+  int x = 0;
+  while(x < sizeof(&framebuffer)){
+    framebuffer[x] = 0;
+    x++;
   }
 }
-  */
+
 
 /*
  * Draw the given string at the given row/column.
