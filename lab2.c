@@ -187,6 +187,7 @@ int main()
             //execute the key
             execute_key(rightmost, packet.modifiers, 0, message);
             cursor_col++;
+            cursor_pos++;
           }
         }
       }
@@ -197,6 +198,7 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("%s\n", keystate); //prints the keystate
+      printf("%s\n", message); //prints the message
       fbputs(keystate, 6, 0); //places the keystate onto the screen
       fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
