@@ -127,10 +127,7 @@ int main()
 
   int cursor_row = 18;
   int cursor_col = 0;
-  uint8_t held_char = 0;
-  uint8_t held_mod = 0;
   struct usb_keyboard_packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
-  uint8_t held_count = 0; 
   char message[BUFFER_SIZE];
   /* Look for and handle keypresses */
   for (;;) {
@@ -144,7 +141,6 @@ int main()
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
         if(packet.keycode[i] == 0){
-          printf("break 1\n");
           break;
         }
         rightmost = i+1;
@@ -153,19 +149,16 @@ int main()
       if(rightmost == 0){
         held_char = 0;
         held_mod = 0;
-        printf("continue 1\n");
         continue;
       }
       rightmost-=1;
       uint8_t new = 1;
       for(int i = 0; i < 6; i++){
         if(packet.keycode[i] == 0){
-          printf("break 2\n");
           break;
         }
         if(prev.keycode[i] == rightmost){
           new = 0;
-          printf("break 3\n");
           break;
         }
       }
@@ -181,7 +174,7 @@ int main()
 	      packet.keycode[1]);
       printf("%s\n", keystate); //prints the keystate
       fbputs(keystate, 6, 0); //places the keystate onto the screen
-      fbputs("",cursor_row,cursor_col-1);
+      fbputs(" ",cursor_row,cursor_col-1);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	      break;
       }
