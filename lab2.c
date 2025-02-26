@@ -147,17 +147,20 @@ int main()
           printf("break 1\n");
           break;
         }
-        rightmost = i;
+        rightmost = i+1;
       }
+      
       if(rightmost == 0){
         held_char = 0;
         held_mod = 0;
         printf("continue 1\n");
         continue;
       }
+      rightmost-=1;
+
       if(rightmost == held_char && packet.modifiers == held_mod){
         if(held_count < HOLD_COUNT){
-          held_count++;
+          held_count++;                       
           
           printf("continue 2\n");
           continue;
