@@ -117,6 +117,7 @@ int main()
       printf("%s\n", keystate); //prints the keystate
       fbputs(keystate, 6, 0); //places the keystate onto the screen
       cursor_col++;
+      fbputs("",cursor_row,cursor_col-1);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
