@@ -135,6 +135,8 @@ int main()
   int cursor_pos = 0
   char message[BUFFER_SIZE];
   /* Look for and handle keypresses */
+
+  /*
   for (;;) {
 
     fbputs("_",cursor_row,cursor_col);
@@ -170,13 +172,19 @@ int main()
         
         if(new == 1){
           // //Checking for left and right arrows
-          // if(packet.keycode[rightmost] == 0x50){
-          //   if(cursor_pos > 0){
-          //     cursor_pos--;
-          //     cursor_col--;
-          //   }
-          // }
-          // else if(packet.keycode[rightmost] == )
+          if(packet.keycode[rightmost] == 0x50){
+            if(cursor_pos > 0){
+              cursor_pos--;
+              cursor_col--;
+            }
+          }
+          else if(packet.keycode[rightmost] == 0x4F){
+            if(cursor_pos < strlen(message)){
+              cursor_pos++;
+              cursor_col++;
+            }
+          }
+          else if(packet.keycode[rightmos] == 0x28 && mo)
           execute_key(rightmost, packet.modifiers, 0, message);
           cursor_col++;
         }
@@ -196,6 +204,8 @@ int main()
     }
   }
 
+  */
+  
   /* Terminate the network thread */
   pthread_cancel(network_thread);
 
