@@ -75,7 +75,7 @@ void fbputchar(char c, int row, int col)
     for (x = 0 ; x < FONT_WIDTH ; x++) {
       if (pixels & mask) {	
 	      pixel[0] = 255; /* Red */
-        pixel[1] = 255; /* Green */
+        pixel[1] = 0; /* Green */
         pixel[2] = 255; /* Blue */
         pixel[3] = 0;
       } else {
@@ -87,7 +87,7 @@ void fbputchar(char c, int row, int col)
       pixel += 4;
       if (pixels & mask) {
 	      pixel[0] = 255; /* Red */
-        pixel[1] = 255; /* Green */
+        pixel[1] = 0; /* Green */
         pixel[2] = 255; /* Blue */
         pixel[3] = 0;
       } else {
