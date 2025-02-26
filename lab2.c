@@ -69,7 +69,7 @@ int main()
 
 
   //Testing the drawline and clear screen functions
-  clearscreen();
+  //clearscreen();
   drawline(17);
 
 

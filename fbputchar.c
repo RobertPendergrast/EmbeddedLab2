@@ -105,7 +105,7 @@ void fbputchar(char c, int row, int col)
 
 //Draw Line Function: This will draw a row of astrics given a row #
 void drawline(int row){
-  for (col = 0 ; col < 64 ; col++) {
+  for (int col = 0 ; col < 64 ; col++) {
     fbputchar('*', row, col);
   }
 }
