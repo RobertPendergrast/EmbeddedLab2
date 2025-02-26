@@ -116,7 +116,6 @@ int main()
 	      packet.keycode[1]);
       printf("%s\n", keystate); //prints the keystate
       fbputs(keystate, 6, 0); //places the keystate onto the screen
-      cursor_row++;
       cursor_col++;
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
