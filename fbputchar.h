@@ -8,7 +8,7 @@
 #define FBOPEN_BPP -5          /* Unexpected bits-per-pixel */
 
 extern int fbopen(void);
-extern void fbputchar(char, int, int);
+extern void fbputchar(char, int, int,int,int,int);
 extern void fbputs(const char *, int, int);
 extern void drawline(int);
 extern void clearscreen();
