@@ -107,6 +107,7 @@ int main()
 
   /* Look for and handle keypresses */
   for (;;) {
+    fbputs("_",cursor_row,cursor_col);
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
@@ -115,7 +116,8 @@ int main()
 	      packet.keycode[1]);
       printf("%s\n", keystate); //prints the keystate
       fbputs(keystate, 6, 0); //places the keystate onto the screen
-      fbputs("_",cursor_row,cursor_col);
+      cursor_row++;
+      cursor_col++;
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
