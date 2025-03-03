@@ -159,7 +159,7 @@ int main()
         //Checking if the key is new, or if it was one that was held before the most recent key was pressed
         uint8_t new = 1;
         for(int i = 0; i < 6; i++){
-          if(prev.keycode[i] == 0){
+          if(packet.keycode[i] == 0){
             break;
           }
           if(prev.keycode[i] == packet.keycode[rightmost]){
@@ -176,7 +176,7 @@ int main()
             }
           }
           else if(packet.keycode[rightmost] == 0x4F){
-            if(cursor_pos < len){
+            if(cursor_pos < strlen(message) - 1){
               cursor_pos++;
             }
           }
@@ -188,6 +188,10 @@ int main()
             change = execute_key(packet.keycode[rightmost], packet.modifiers, cursor_pos, message, len);
             cursor_pos+=change;
             len+=change;
+            if(len>BUFFER_SIZE-1){
+              len = BUFFER_SIZE-1;
+            }
+            printf("len: %d\n", len);
           }
         }
       }
@@ -236,15 +240,14 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
     }
     return 0;
   }
-  int top = len+1;
-  if(top>BUFFER_SIZE - 1){
-    top = BUFFER_SIZE - 1;
-  }
   //everything else
   if(modifiers == 0){
     //printf("Modifiers == 0\n");
     //printf("Key: %d\n", key);
-    
+    int top = len;
+    if(len>BUFFER_SIZE - 1){
+      top = BUFFER_SIZE - 1;
+    }
     if(keycode_to_ascii[key] != 0){
       //printf("keycode != 0  %d\n", position);
       
@@ -263,6 +266,7 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
     if(keycode_to_ascii_shift[key] != 0){
       //printf("keycode != 0\n");
       //Shift everything after position down
+      int top = len;
       for(int i = top; i > position; i--){
         message[i] = message[i-1];
       }
