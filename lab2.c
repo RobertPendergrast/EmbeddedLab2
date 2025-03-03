@@ -239,6 +239,7 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
         message[i] = message[i-1];
       }
       message[position] = keycode_to_ascii[key];
+      printf("Hit");
     }
   }
   else if(modifiers == SHIFT){
