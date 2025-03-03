@@ -197,6 +197,7 @@ int main()
       //printf("%s\n", keystate); //prints the keystate
       //printf("%s\n", message); //prints the message
       fbputs(keystate, 6, 0); //places the keystate onto the screen
+      
 
       print_message(message, USER_ROW, cursor_pos);
       
@@ -237,13 +238,14 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
     printf("Modifiers == 0\n");
     printf("Key: %d\n", key);
     if(keycode_to_ascii[key] != 0){
-      printf("keycode != 0");
+      printf("keycode != 0  %d\n", position);
       
       //Shift everything after position down
       for(int i = strlen(message); i > position; i--){
         message[i] = message[i-1];
       }
       message[position] = keycode_to_ascii[key];
+      printf("after shift things\n");
       
     }
   }
@@ -259,6 +261,7 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
     }
   }
   message[position+1] = '\0';
+  printf("")
 }
 
 void print_message(char * message, int start_row, int cursor_pos){
@@ -267,12 +270,9 @@ void print_message(char * message, int start_row, int cursor_pos){
   //Clear the input section
   for(int i = 0; i < rows; i++){
     clearline(start_row+i);
-    printf("Before Before Seg Fault");
     char temp = message[(i+1)*ROW_WIDTH];
-    printf("Before Seg Fault");
     message[(i+1)*ROW_WIDTH] = '\0';
-    printf("After Seg Fault");
-    fbputs(message[i*ROW_WIDTH], start_row, 0);
+    fbputs(&(message[i*ROW_WIDTH]), start_row, 0);
     message[(i+1)*ROW_WIDTH] = temp;
   }
   //
