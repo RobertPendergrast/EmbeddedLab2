@@ -254,6 +254,7 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
 }
 
 void print_message(char * message, int row){
+  printf("Printing Message: %s",message);
   clearline(row);
   fbputs(message, row, 0);
 }
