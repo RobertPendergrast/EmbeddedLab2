@@ -231,18 +231,23 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
       }
       message[len-1] = '\0';
       position--;
+      return -1;
     }
-    return -1;
+    return 0;
   }
   //everything else
   if(modifiers == 0){
     //printf("Modifiers == 0\n");
     //printf("Key: %d\n", key);
+    int top = len;
+    if(len>BUFFER_SIZE - 1){
+      top = BUFFER_SIZE - 1;
+    }
     if(keycode_to_ascii[key] != 0){
       //printf("keycode != 0  %d\n", position);
       
       //Shift everything after position down
-      for(int i = len; i > position; i--){
+      for(int i = top; i > position; i--){
         message[i] = message[i-1];
       }
       message[position] = keycode_to_ascii[key];
@@ -256,7 +261,7 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
     if(keycode_to_ascii_shift[key] != 0){
       //printf("keycode != 0\n");
       //Shift everything after position down
-      for(int i = len; i > position; i--){
+      for(int i = top; i > position; i--){
         message[i] = message[i-1];
       }
       message[position] = keycode_to_ascii_shift[key];
