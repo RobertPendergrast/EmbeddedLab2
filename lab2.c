@@ -352,7 +352,7 @@ void *network_thread_f(void *ignored)
     }
     
     // Check if we need to wrap to the top
-    if (recvRow + rows_needed >= USER_ROW - 1) {
+    if (recvRow + rows_needed >= USER_ROW ) {
       recvRow = 1;    }
     
     // Use the print_message function to display the message
@@ -361,7 +361,7 @@ void *network_thread_f(void *ignored)
     
     recvRow += rows_needed;
     
-    if (recvRow >= USER_ROW - 1) {
+    if (recvRow >= USER_ROW ) {
       recvRow = 1;
     }
   }
