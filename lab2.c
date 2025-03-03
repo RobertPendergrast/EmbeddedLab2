@@ -134,7 +134,7 @@ int main()
   int cursor_pos = 0;
   int len = 0;
   int change = 0;
-  char message[BUFFER_SIZE];
+  char message[BUFFER_SIZE] = {0}; // Initialize all elements to zero
   /* Look for and handle keypresses */
 
   
@@ -181,7 +181,8 @@ int main()
             }
           }
           else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
-            //send the message
+            write(sockfd, message, len);
+            message[0] = '\0';
           }
           else{
             //execute the key
