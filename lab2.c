@@ -196,6 +196,9 @@ int main()
           }
           else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
             write(sockfd, message, len);
+            for(int i = 0; i < (BUFFER_SIZE/ROW_WIDTH-1)+1){
+              clearline(USER_ROW + i)
+            }
             message[0] = '\0';
             len = 0;
             cursor_pos = 0;
@@ -283,7 +286,7 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
       return 0;
     }
   }
-  else if(modifiers == LSHIFT || modifiers == RSHIFT || modifiers == LSHIFT | RSHIFT){
+  else if(modifiers == LSHIFT || modifiers == RSHIFT || modifiers == (LSHIFT | RSHIFT)){
     //printf("Shift\n");
     if(keycode_to_ascii_shift[key] != 0){
       //printf("keycode != 0\n");
@@ -314,6 +317,7 @@ void print_message(char * message, int start_row, int cursor_pos){
     fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0);
     message[(i+1)*ROW_WIDTH] = temp;
   }
+  draw_cursor(cursor_pos);
   //
 }
 
@@ -321,11 +325,18 @@ void *network_thread_f(void *ignored)
 {
   char recvBuf[BUFFER_SIZE];
   int n;
+  int recvRow = 0;
+
   /* Receive data */
   while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
     recvBuf[n] = '\0';
     printf("%s", recvBuf);
-    fbputs(recvBuf, 0, 0); //changed the row to below the line 
+    fbputs(recvBuf, recvRow, 0);  
+    recvRow++;
+    if (recv_row >= USER_ROW - 1) {
+      recv_row = 1;
+    }    
+
   }
 
   return NULL;

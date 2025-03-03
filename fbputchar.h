@@ -13,5 +13,6 @@ extern void fbputs(const char *, int, int);
 extern void drawline(int);
 extern void clearscreen();
 extern void clearline(int);
+extern void draw_cursor(const char *, int);
 
 #endif
