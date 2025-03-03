@@ -337,7 +337,7 @@ void *network_thread_f(void *ignored)
 {
   char recvBuf[BUFFER_SIZE];
   int n;
-  int recvRow = 1; // Start at row 1 to avoid top border
+  int recvRow = 0; // Start at row 1 to avoid top border
   
   /* Receive data */
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
