@@ -24,6 +24,7 @@
 #define HOLD_COUNT 50
 #define BUFFER_SIZE 128
 #define ROW_WIDTH 64
+#define USER_ROW 18
 
 /*
  * References:
@@ -96,7 +97,7 @@ int main()
   
   //Testing the drawline and clear screen functions
   clearscreen();   
-  drawline(17);
+  drawline(USER_ROW-1);
 
 
   /* Open the keyboard */
@@ -129,8 +130,6 @@ int main()
   /* Start the network thread */
   pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
-  int cursor_row = 18;
-  int cursor_col = 0;
   struct usb_keyboard_packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
   int cursor_pos = 0;
   char message[BUFFER_SIZE];
@@ -139,12 +138,10 @@ int main()
   
   for (;;) {
 
-    fbputs("_",cursor_row,cursor_col);
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
     if (transferred == sizeof(packet)) {
-      fbputs(" ", cursor_row, cursor_col);
       //Checking for the rightmost key pressed, as that is the only one we may want to send.
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
@@ -175,13 +172,11 @@ int main()
           if(packet.keycode[rightmost] == 0x50){
             if(cursor_pos > 0){
               cursor_pos--;
-              cursor_col--;
             }
           }
           else if(packet.keycode[rightmost] == 0x4F){
             if(cursor_pos < strlen(message)){
               cursor_pos++;
-              cursor_col++;
             }
           }
           else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
@@ -190,7 +185,6 @@ int main()
           else{
             //execute the key
             execute_key(packet.keycode[rightmost], packet.modifiers, cursor_pos, message);
-            cursor_col++;
             cursor_pos++;
           }
         }
@@ -198,13 +192,14 @@ int main()
 
       
       prev = packet;
-      fbputs(" ", cursor_row, cursor_col);
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       //printf("%s\n", keystate); //prints the keystate
       //printf("%s\n", message); //prints the message
       fbputs(keystate, 6, 0); //places the keystate onto the screen
-      print_message(message, cursor_row);
+
+      print_message(message, USER_ROW);
+      
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	      break;
