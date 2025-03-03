@@ -192,7 +192,7 @@ int main()
               len = BUFFER_SIZE-1;
             }
             if(cursor_pos>BUFFER_SIZE){
-              cursor_pos = BUFFER_SIZE
+              cursor_pos = BUFFER_SIZE;
             }
             printf("len: %d cursor: %d\n", len, cursor_pos);
           }
