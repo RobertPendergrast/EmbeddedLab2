@@ -133,6 +133,8 @@ int main()
   struct usb_keyboard_packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
   int cursor_pos = 0;
   int len = 0;
+  int change = 0;
+  int top;
   char message[BUFFER_SIZE];
   /* Look for and handle keypresses */
 
