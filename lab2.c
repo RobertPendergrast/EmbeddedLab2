@@ -200,6 +200,7 @@ int main()
       printf("%s\n", keystate); //prints the keystate
       printf("%s\n", message); //prints the message
       fbputs(keystate, 6, 0); //places the keystate onto the screen
+      print_message(message, cursor_row);
       fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	      break;
@@ -250,6 +251,12 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
   }
   message[position+1] = '\0';
 }
+
+void print_message(char * message, int row){
+  clearline(row);
+  fbputs(message, row, 0);
+}
+
 void *network_thread_f(void *ignored)
 {
   char recvBuf[BUFFER_SIZE];
