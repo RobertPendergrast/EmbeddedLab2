@@ -337,19 +337,53 @@ void *network_thread_f(void *ignored)
 {
   char recvBuf[BUFFER_SIZE];
   int n;
-  int recvRow = 0;
-
+  int recvRow = 1; // Start at row 1 to avoid top border
+  
   /* Receive data */
-  while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
-    recvBuf[n-1] = '\0';
-    printf("%s", recvBuf);
-    clearline(recvRow);
-    fbputs(recvBuf, recvRow, 0);  
-    recvRow++;
+  while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
+    recvBuf[n-1] = '\0'; //made n-1 so that newline is not printed
+    printf("%s\n", recvBuf);
+    
+    // Calculate how many rows this message will need
+    int msg_len = strlen(recvBuf);
+    int rows_needed = (msg_len / ROW_WIDTH) + 1;
+    
+    // Check if we need to wrap to the top
+    if (recvRow + rows_needed >= USER_ROW - 1) {
+      recvRow = 1; // Reset to the top (below the border)
+    }
+    
+    // Clear the rows we'll use
+    for (int i = 0; i < rows_needed; i++) {
+      clearline(recvRow + i);
+    }
+    
+    // Display the message with wrapping
+    for (int i = 0; i < rows_needed; i++) {
+      // Calculate the start and end indices for this row
+      int start_idx = i * ROW_WIDTH;
+      if (start_idx >= msg_len) break;
+      
+      // Create a temporary buffer for this row
+      char row_buf[ROW_WIDTH + 1];
+      int chars_to_copy = (start_idx + ROW_WIDTH <= msg_len) ? 
+                          ROW_WIDTH : (msg_len - start_idx);
+      
+      // Copy the appropriate section of the message
+      strncpy(row_buf, &recvBuf[start_idx], chars_to_copy);
+      row_buf[chars_to_copy] = '\0';
+      
+      // Display this row
+      fbputs(row_buf, recvRow + i, 0);
+    }
+    
+    // Update recvRow for the next message
+    recvRow += rows_needed;
+    
+    // If we've reached close to the input area, wrap back to the top
     if (recvRow >= USER_ROW - 1) {
       recvRow = 1;
-    }    
-
+    }
   }
 
   return NULL;
