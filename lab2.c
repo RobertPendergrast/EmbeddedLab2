@@ -42,6 +42,8 @@ pthread_t network_thread;
 void *network_thread_f(void *);
 void execute_key(uint8_t key, uint8_t modifiers, int position, char * message);
 void print_message(char * message, int cursor_row);
+
+
 // USB HID Keyboard scancode to ASCII mapping
 static const char keycode_to_ascii[128] = {
     0,   0,   0,   0,  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',  // 0x00-0x0F
@@ -237,9 +239,10 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
   //everything else
   if(modifiers == 0){
     printf("Modifiers == 0");
+    printf("Key: %d", key);
     if(keycode_to_ascii[key] != 0){
       printf("keycode != 0");
-      printf("Key: %d", key);
+      
       //Shift everything after position down
       for(int i = strlen(message); i > position; i--){
         message[i] = message[i-1];
