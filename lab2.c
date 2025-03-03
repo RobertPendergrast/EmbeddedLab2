@@ -195,7 +195,7 @@ int main()
           }
           else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
             write(sockfd, message, len);
-            for(int i = 0; i < (BUFFER_SIZE/ROW_WIDTH-1)+1){
+            for(int i = 0; i < (BUFFER_SIZE/ROW_WIDTH-1)+1, i++){
               clearline(USER_ROW + i)
             }
             message[0] = '\0';
