@@ -176,7 +176,7 @@ int main()
             }
           }
           else if(packet.keycode[rightmost] == 0x4F){
-            if(cursor_pos < strlen(message) - 1){
+            if(cursor_pos < len){
               cursor_pos++;
             }
           }
@@ -242,7 +242,7 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
   }
   int top = len;
   if(len>BUFFER_SIZE - 2){
-    top = BUFFER_SIZE - 1;
+    top = BUFFER_SIZE - 2;
   }
   //everything else
   if(modifiers == 0){
