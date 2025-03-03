@@ -347,6 +347,9 @@ void *network_thread_f(void *ignored)
     // Calculate how many rows this message will need
     int msg_len = strlen(recvBuf);
     int rows_needed = (msg_len / ROW_WIDTH) + 1;
+    if(msg_len % ROW_WIDTH == 0) {
+      rows_needed--;
+    }
     
     // Check if we need to wrap to the top
     if (recvRow + rows_needed >= USER_ROW - 1) {
