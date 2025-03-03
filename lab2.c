@@ -22,7 +22,7 @@
 #define SERVER_PORT 42000
 #define SHIFT 2
 #define HOLD_COUNT 50
-#define BUFFER_SIZE 128
+#define BUFFER_SIZE 129
 #define ROW_WIDTH 64
 #define USER_ROW 18
 
@@ -43,7 +43,7 @@ uint8_t endpoint_address;
 pthread_t network_thread;
 void *network_thread_f(void *);
 void execute_key(uint8_t key, uint8_t modifiers, int position, char * message);
-void print_message(char * message, int cursor_row);
+void print_message(char * message, int start_row, int cursor_pos);
 
 
 // USB HID Keyboard scancode to ASCII mapping
@@ -198,7 +198,7 @@ int main()
       //printf("%s\n", message); //prints the message
       fbputs(keystate, 6, 0); //places the keystate onto the screen
 
-      print_message(message, USER_ROW);
+      print_message(message, USER_ROW, cursor_pos);
       
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
