@@ -20,7 +20,8 @@
 /* arthur.cs.columbia.edu */
 #define SERVER_HOST "128.59.19.114"
 #define SERVER_PORT 42000
-#define SHIFT 2
+#define LSHIFT 2
+#define RSHIFT 0x20
 #define HOLD_COUNT 50
 #define BUFFER_SIZE 129
 #define ROW_WIDTH 64
@@ -57,6 +58,19 @@ static const char keycode_to_ascii[128] = {
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x60-0x6F
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0    // 0x70-0x7F
 };
+
+
+static const char keycode_to_ascii_caps_lock[128] = {
+    0,   0,   0,   0,  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'l',  // 0x00-0x0Fl
+    'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2',  // 0x10-0x1F
+    '3', '4', '5', '6', '7', '8', '9', '0', '\n', 0,   0,   0,   ' ', '-', '=', '[',  // 0x20-0x2F
+    ']', '\\', 0,  ';', '\'', '`', ',', '.', '/',  0,   0,   0,   0,   0,   0,   0,   // 0x30-0x3F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x40-0x4F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x50-0x5F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x60-0x6F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0    // 0x70-0x7F
+};
+
 
 // Shift key modifier for special characters
 static const char keycode_to_ascii_shift[128] = {
@@ -183,6 +197,8 @@ int main()
           else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
             write(sockfd, message, len);
             message[0] = '\0';
+            len = 0;
+            cursor_pos = 0;
           }
           else{
             //execute the key
@@ -262,11 +278,12 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
       }
       message[position] = keycode_to_ascii[key];
       //printf("after shift things\n");
-      
-      
+    }
+    else{
+      return 0;
     }
   }
-  else if(modifiers == SHIFT){
+  else if(modifiers == LSHIFT || modifiers == RSHIFT || modifiers == LSHIFT | RSHIFT){
     //printf("Shift\n");
     if(keycode_to_ascii_shift[key] != 0){
       //printf("keycode != 0\n");
@@ -276,6 +293,12 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
       }
       message[position] = keycode_to_ascii_shift[key];
     }
+    else{
+      return 0;
+    }
+  }
+  else{
+    return 0;
   }
   message[top+1] = '\0';
   return  1;
