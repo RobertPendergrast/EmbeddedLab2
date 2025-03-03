@@ -261,7 +261,6 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
     }
   }
   message[position+1] = '\0';
-  printf("")
 }
 
 void print_message(char * message, int start_row, int cursor_pos){
