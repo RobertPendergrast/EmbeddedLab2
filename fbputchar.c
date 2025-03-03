@@ -141,10 +141,49 @@ void fbputs(const char *s, int row, int col)
   while ((c = *s++) != 0) fbputchar(c, row, col++,255,0,255);
 }
 
-void draw_cursor(int cursor_pos){
-  
-}
 
+void draw_cursor(int position)
+{
+  int row = position/ROW_WIDTH;
+  int col = position%ROW_WIDTH;
+  int x, y;
+  unsigned char *pixel, *left = framebuffer +
+    (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
+    (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  for (y = 0 ; y < FONT_HEIGHT * 2 ; y++, left += fb_finfo.line_length) {
+    pixels = *pixelp;
+    pixel = left;
+    mask = 0x80;
+    for (x = 0 ; x < FONT_WIDTH ; x++) {
+      if (pixels & mask) {	
+	      pixel[0] = r; /* Red */
+        pixel[1] = g; /* Green */
+        pixel[2] = b; /* Blue */
+        pixel[3] = 0;
+      } else {
+	      pixel[0] = 0;
+        pixel[1] = 0;
+        pixel[2] = 0;
+        pixel[3] = 0;
+      }
+      pixel += 4;
+      if (pixels & mask) {
+	      pixel[0] = r; /* Red */
+        pixel[1] = g; /* Green */
+        pixel[2] = b; /* Blue */
+        pixel[3] = 0;
+      } else {
+	      pixel[0] = 0;
+        pixel[1] = 0;
+        pixel[2] = 0;
+        pixel[3] = 0;
+      }
+      pixel += 4;
+      mask >>= 1;
+    }
+    if (y & 0x1) pixelp++;
+  }
+}
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
 

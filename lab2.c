@@ -24,7 +24,6 @@
 #define RSHIFT 0x20
 #define HOLD_COUNT 50
 #define BUFFER_SIZE 129
-#define ROW_WIDTH 64
 #define USER_ROW 18
 
 /*
@@ -333,8 +332,8 @@ void *network_thread_f(void *ignored)
     printf("%s", recvBuf);
     fbputs(recvBuf, recvRow, 0);  
     recvRow++;
-    if (recv_row >= USER_ROW - 1) {
-      recv_row = 1;
+    if (recvRow >= USER_ROW - 1) {
+      recvRow = 1;
     }    
 
   }
