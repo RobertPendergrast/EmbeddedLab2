@@ -159,7 +159,7 @@ int main()
         //Checking if the key is new, or if it was one that was held before the most recent key was pressed
         uint8_t new = 1;
         for(int i = 0; i < 6; i++){
-          if(packet.keycode[i] == 0){
+          if(prev.keycode[i] == 0){
             break;
           }
           if(prev.keycode[i] == packet.keycode[rightmost]){
@@ -176,7 +176,7 @@ int main()
             }
           }
           else if(packet.keycode[rightmost] == 0x4F){
-            if(cursor_pos < strlen(message) - 1){
+            if(cursor_pos < len){
               cursor_pos++;
             }
           }
