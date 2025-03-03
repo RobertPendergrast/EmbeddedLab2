@@ -341,7 +341,7 @@ void *network_thread_f(void *ignored)
   
   /* Receive data */
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
-    recvBuf[n-1] = '\0'; //made n-1 so that newline is not printed
+    recvBuf[n] = '\0'; 
     printf("%s\n", recvBuf);
     
     // Calculate how many rows this message will need
