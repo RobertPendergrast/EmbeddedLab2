@@ -268,7 +268,9 @@ void print_message(char * message, int start_row, int cursor_pos){
   for(int i = 0; i < rows; i++){
     clearline(start_row+i);
     char temp = message[(i+1)*ROW_WIDTH];
+    printf("Before Seg Fault");
     message[(i+1)*ROW_WIDTH] = '\0';
+    printf("After Seg Fault");
     fbputs(message[i*ROW_WIDTH], start_row, 0);
     message[(i+1)*ROW_WIDTH] = temp;
   }
