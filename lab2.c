@@ -138,7 +138,6 @@ int main()
 
   
   for (;;) {
-
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
@@ -176,7 +175,7 @@ int main()
             }
           }
           else if(packet.keycode[rightmost] == 0x4F){
-            if(cursor_pos < strlen(message)){
+            if(cursor_pos < strlen(message) - 1){
               cursor_pos++;
             }
           }
@@ -185,8 +184,9 @@ int main()
           }
           else{
             //execute the key
-            len = execute_key(packet.keycode[rightmost], packet.modifiers, cursor_pos, message, len);
-            cursor_pos++;
+            change = execute_key(packet.keycode[rightmost], packet.modifiers, cursor_pos, message, len);
+            cursor_pos+=change;
+            len+=change;
           }
         }
       }
@@ -221,40 +221,40 @@ int main()
 }
 int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int len){
   //Dealing with backspace
-  printf("Called Execute_Key\n");
+  //printf("Called Execute_Key\n");
   if(key == 0x2A){
-    printf("Key == 0x2A");
+    //printf("Key == 0x2A");
     if(position > 0){
-      printf("Position > 0");
+      //printf("Position > 0");
       for(int i = position; i < len; i++){
         message[i-1] = message[i];
       }
       message[len-1] = '\0';
       position--;
     }
-    return len-1;
+    return -1;
   }
   //everything else
   if(modifiers == 0){
-    printf("Modifiers == 0\n");
-    printf("Key: %d\n", key);
+    //printf("Modifiers == 0\n");
+    //printf("Key: %d\n", key);
     if(keycode_to_ascii[key] != 0){
-      printf("keycode != 0  %d\n", position);
+      //printf("keycode != 0  %d\n", position);
       
       //Shift everything after position down
       for(int i = len; i > position; i--){
         message[i] = message[i-1];
       }
       message[position] = keycode_to_ascii[key];
-      printf("after shift things\n");
+      //printf("after shift things\n");
       
       
     }
   }
   else if(modifiers == SHIFT){
-    printf("Shift\n");
+    //printf("Shift\n");
     if(keycode_to_ascii_shift[key] != 0){
-      printf("keycode != 0\n");
+      //printf("keycode != 0\n");
       //Shift everything after position down
       for(int i = len; i > position; i--){
         message[i] = message[i-1];
@@ -263,7 +263,7 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
     }
   }
   message[len+1] = '\0';
-  return len + 1;
+  return  1;
 }
 
 void print_message(char * message, int start_row, int cursor_pos){
