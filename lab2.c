@@ -42,7 +42,7 @@ uint8_t endpoint_address;
 
 pthread_t network_thread;
 void *network_thread_f(void *);
-void execute_key(uint8_t key, uint8_t modifiers, int position, char * message);
+int execute_key(uint8_t key, uint8_t modifiers, int position, char * message, int len);
 void print_message(char * message, int start_row, int cursor_pos);
 
 
