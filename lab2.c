@@ -132,6 +132,7 @@ int main()
 
   struct usb_keyboard_packet prev = {0, 0, {0, 0, 0, 0, 0, 0}};
   int cursor_pos = 0;
+  int len = 0;
   char message[BUFFER_SIZE];
   /* Look for and handle keypresses */
 
@@ -184,7 +185,7 @@ int main()
           }
           else{
             //execute the key
-            execute_key(packet.keycode[rightmost], packet.modifiers, cursor_pos, message);
+            len = execute_key(packet.keycode[rightmost], packet.modifiers, cursor_pos, message, len);
             cursor_pos++;
           }
         }
@@ -218,20 +219,20 @@ int main()
 
   return 0;
 }
-void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
+int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int len){
   //Dealing with backspace
   printf("Called Execute_Key\n");
   if(key == 0x2A){
     printf("Key == 0x2A");
     if(position > 0){
       printf("Position > 0");
-      for(int i = position; i < strlen(message); i++){
+      for(int i = position; i < len; i++){
         message[i-1] = message[i];
       }
-      message[strlen(message)-1] = '\0';
+      message[len-1] = '\0';
       position--;
     }
-    return;
+    return len-1;
   }
   //everything else
   if(modifiers == 0){
@@ -241,11 +242,12 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
       printf("keycode != 0  %d\n", position);
       
       //Shift everything after position down
-      for(int i = strlen(message); i > position; i--){
+      for(int i = len; i > position; i--){
         message[i] = message[i-1];
       }
       message[position] = keycode_to_ascii[key];
       printf("after shift things\n");
+      
       
     }
   }
@@ -254,12 +256,14 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
     if(keycode_to_ascii_shift[key] != 0){
       printf("keycode != 0\n");
       //Shift everything after position down
-      for(int i = strlen(message); i > position; i--){
+      for(int i = len; i > position; i--){
         message[i] = message[i-1];
       }
       message[position] = keycode_to_ascii_shift[key];
     }
   }
+  message[len+1] = '\0';
+  return len + 1;
 }
 
 void print_message(char * message, int start_row, int cursor_pos){
