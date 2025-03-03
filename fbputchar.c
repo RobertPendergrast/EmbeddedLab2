@@ -146,10 +146,7 @@ void draw_cursor(int position)
 {
   int row = position/ROW_WIDTH;
   int col = position%ROW_WIDTH;
-  int x, y;
-  unsigned char *pixel, *left = framebuffer +
-    (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
-    (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  int x, y; 
   for (y = 0 ; y < FONT_HEIGHT * 2 ; y++, left += fb_finfo.line_length) {
     pixels = *pixelp;
     pixel = left;
