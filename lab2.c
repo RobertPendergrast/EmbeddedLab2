@@ -239,6 +239,7 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
     printf("Modifiers == 0");
     if(keycode_to_ascii[key] != 0){
       printf("keycode != 0");
+      printf("%d", key);
       //Shift everything after position down
       for(int i = strlen(message); i > position; i--){
         message[i] = message[i-1];
