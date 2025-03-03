@@ -23,6 +23,7 @@
 #define SHIFT 2
 #define HOLD_COUNT 50
 #define BUFFER_SIZE 128
+#define ROW_WIDTH 64
 
 /*
  * References:
@@ -200,11 +201,11 @@ int main()
       fbputs(" ", cursor_row, cursor_col);
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      printf("%s\n", keystate); //prints the keystate
-      printf("%s\n", message); //prints the message
+      //printf("%s\n", keystate); //prints the keystate
+      //printf("%s\n", message); //prints the message
       fbputs(keystate, 6, 0); //places the keystate onto the screen
       print_message(message, cursor_row);
-      fbputs(" ",cursor_row,cursor_col-1); //render cursor
+      //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	      break;
       }
@@ -265,10 +266,18 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
   message[position+1] = '\0';
 }
 
-void print_message(char * message, int row){
+void print_message(char * message, int start_row, int cursor_pos){
   printf("Printing Message: %s",message);
-  clearline(row);
-  fbputs(message, row, 0);
+  int rows = (strlen(message)-1)/ROW_WIDTH + 1;
+  //Clear the input section
+  for(int i = 0; i < rows; i++){
+    clearline(start_row+i);
+    char temp = message[(i+1)*ROW_WIDTH];
+    message[(i+1)*ROW_WIDTH] = '\0';
+    fbputs(message[i*ROW_WIDTH], start_row, 0);
+    message[(i+1)*ROW_WIDTH] = temp;
+  }
+  //
 }
 
 void *network_thread_f(void *ignored)
