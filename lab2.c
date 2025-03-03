@@ -221,8 +221,11 @@ int main()
 }
 void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
   //Dealing with backspace
+  printf("Called Execute_Key");
   if(key == 0x2A){
+    printf("Key == 0x2A");
     if(position > 0){
+      printf("Position > 0");
       for(int i = position; i < strlen(message); i++){
         message[i-1] = message[i];
       }
@@ -233,17 +236,21 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
   }
   //everything else
   if(modifiers == 0){
+    printf("Modifiers == 0");
     if(keycode_to_ascii[key] != 0){
+      printf("keycode != 0");
       //Shift everything after position down
       for(int i = strlen(message); i > position; i--){
         message[i] = message[i-1];
       }
       message[position] = keycode_to_ascii[key];
-      printf("Hit");
+      
     }
   }
   else if(modifiers == SHIFT){
+    printf("Shift");
     if(keycode_to_ascii_shift[key] != 0){
+      printf("keycode != 0");
       //Shift everything after position down
       for(int i = strlen(message); i > position; i--){
         message[i] = message[i-1];
