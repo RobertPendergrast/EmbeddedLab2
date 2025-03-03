@@ -188,7 +188,7 @@ int main()
           }
           else{
             //execute the key
-            execute_key(rightmost, packet.modifiers, 0, message);
+            execute_key(packet.keycode[rightmost], packet.modifiers, 0, message);
             cursor_col++;
             cursor_pos++;
           }
@@ -223,7 +223,7 @@ int main()
 }
 void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
   //Dealing with backspace
-  printf("Called Execute_Key");
+  printf("Called Execute_Key\n");
   if(key == 0x2A){
     printf("Key == 0x2A");
     if(position > 0){
@@ -238,8 +238,8 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
   }
   //everything else
   if(modifiers == 0){
-    printf("Modifiers == 0");
-    printf("Key: %d", key);
+    printf("Modifiers == 0\n");
+    printf("Key: %d\n", key);
     if(keycode_to_ascii[key] != 0){
       printf("keycode != 0");
       
@@ -252,9 +252,9 @@ void execute_key(uint8_t key, uint8_t modifiers, int position, char* message){
     }
   }
   else if(modifiers == SHIFT){
-    printf("Shift");
+    printf("Shift\n");
     if(keycode_to_ascii_shift[key] != 0){
-      printf("keycode != 0");
+      printf("keycode != 0\n");
       //Shift everything after position down
       for(int i = strlen(message); i > position; i--){
         message[i] = message[i-1];
