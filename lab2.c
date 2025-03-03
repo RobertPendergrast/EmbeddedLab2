@@ -41,6 +41,7 @@ uint8_t endpoint_address;
 pthread_t network_thread;
 void *network_thread_f(void *);
 void execute_key(uint8_t key, uint8_t modifiers, int position, char * message);
+void print_message(char * message, int cursor_row);
 // USB HID Keyboard scancode to ASCII mapping
 static const char keycode_to_ascii[128] = {
     0,   0,   0,   0,  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',  // 0x00-0x0F
