@@ -188,7 +188,7 @@ int main()
           }
           else{
             //execute the key
-            execute_key(packet.keycode[rightmost], packet.modifiers, 0, message);
+            execute_key(packet.keycode[rightmost], packet.modifiers, cursor_pos, message);
             cursor_col++;
             cursor_pos++;
           }
