@@ -45,6 +45,8 @@ void *network_thread_f(void *);
 int execute_key(uint8_t key, uint8_t modifiers, int position, char * message, int len);
 void print_message(char * message, int start_row, int cursor_pos);
 
+// Add caps lock tracking variable
+int caps_lock_enabled = 0;  
 
 // USB HID Keyboard scancode to ASCII mapping
 static const char keycode_to_ascii[128] = {
@@ -193,6 +195,11 @@ int main()
               cursor_pos++;
             }
           }
+          // Check for caps lock key
+          else if(packet.keycode[rightmost] == 0x39){
+            caps_lock_enabled = !caps_lock_enabled;  // Toggle caps lock state
+            // You could add visual indicator here if desired
+          }
           else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
             write(sockfd, message, len);
             for(int i = 0; i < (BUFFER_SIZE/ROW_WIDTH-1)+1; i++){
@@ -266,7 +273,8 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
   if(len>BUFFER_SIZE - 2){
     top = BUFFER_SIZE - 2;
   }
-  //everything else
+  
+  // everything else
   if(modifiers == 0){
     //printf("Modifiers == 0\n");
     //printf("Key: %d\n", key);
@@ -278,7 +286,12 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
       for(int i = top; i > position; i--){
         message[i] = message[i-1];
       }
-      message[position] = keycode_to_ascii[key];
+      if(caps_lock_enabled){
+        message[position] = keycode_to_ascii_caps_lock[key];
+      }
+      else{
+        message[position] = keycode_to_ascii[key];
+      }
       //printf("after shift things\n");
     }
     else{
@@ -330,6 +343,7 @@ void *network_thread_f(void *ignored)
   while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
     recvBuf[n] = '\0';
     printf("%s", recvBuf);
+    clearline();
     fbputs(recvBuf, recvRow, 0);  
     recvRow++;
     if (recvRow >= USER_ROW - 1) {
