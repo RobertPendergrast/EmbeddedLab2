@@ -353,17 +353,14 @@ void *network_thread_f(void *ignored)
     
     // Check if we need to wrap to the top
     if (recvRow + rows_needed >= USER_ROW - 1) {
-      recvRow = 1; // Reset to the top (below the border)
-    }
+      recvRow = 1;    }
     
     // Use the print_message function to display the message
     // but we pass -1 as cursor_pos to prevent drawing a cursor
-    print_message(displayBuf, recvRow, -1);
+    print_message(recvBuf, recvRow, -1);
     
-    // Update recvRow for the next message
     recvRow += rows_needed;
     
-    // If we've reached close to the input area, wrap back to the top
     if (recvRow >= USER_ROW - 1) {
       recvRow = 1;
     }
