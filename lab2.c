@@ -270,7 +270,7 @@ void print_message(char * message, int start_row, int cursor_pos){
     clearline(start_row+i);
     char temp = message[(i+1)*ROW_WIDTH];
     message[(i+1)*ROW_WIDTH] = '\0';
-    fbputs(&(message[i*ROW_WIDTH]), start_row, 0);
+    fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0);
     message[(i+1)*ROW_WIDTH] = temp;
   }
   //
