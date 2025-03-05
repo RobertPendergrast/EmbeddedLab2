@@ -215,14 +215,15 @@ int main()
             caps_lock_enabled = !caps_lock_enabled;  // Toggle caps lock state
             // You could add visual indicator here if desired
           }
+          //press enter
           else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
-            // write(sockfd, message, len);
-            // for(int i = 0; i < (BUFFER_SIZE/ROW_WIDTH-1)+1; i++){
-            //   clearline(USER_ROW + i);
-            // }
-            // message[0] = '\0';
-            // len = 0;
-            // cursor_pos = 0;
+            write(sockfd, message, len);
+            for(int i = 0; i < (BUFFER_SIZE/ROW_WIDTH-1)+1; i++){
+              //clearline(USER_ROW + i);
+            }
+            message[0] = '\0';
+            len = 0;
+            cursor_pos = 0;
           }
           else{
             //execute the key
