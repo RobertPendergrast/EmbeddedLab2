@@ -367,7 +367,7 @@ void print_cursor(char* message,int start_row, int cursor_pos){
   int col = cursor_pos%ROW_WIDTH;
   if(start_row + row < 24){
     printf("Printing Cursor...\n");
-    fbputcharinv(message[cursor_pos], start_row + row, col,255,255,255);
+    //fbputcharinv(message[cursor_pos], start_row + row, col,255,255,255);
   }
 }
 
