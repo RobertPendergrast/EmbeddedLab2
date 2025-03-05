@@ -334,6 +334,18 @@ void print_message(char * message, int start_row, int cursor_pos){
     clearline(start_row+i);
     char temp = message[(i+1)*ROW_WIDTH];
     message[(i+1)*ROW_WIDTH] = '\0';
+    fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,200,200,200);
+    message[(i+1)*ROW_WIDTH] = temp;
+  }
+}
+
+void print_sent_message(char * message, int start_row, int cursor_pos){
+  int rows = (strlen(message))/ROW_WIDTH + 1;
+  //Clear the input section
+  for(int i = 0; i < rows; i++){
+    clearline(start_row+i);
+    char temp = message[(i+1)*ROW_WIDTH];
+    message[(i+1)*ROW_WIDTH] = '\0';
     if(message_count % 2 == 0){
       fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,200,200,200);
     } else{
@@ -375,7 +387,7 @@ void *network_thread_f(void *ignored)
     
     // Use the print_message function to display the message
     // but we pass -1 as cursor_pos to prevent drawing a cursor
-    print_message(recvBuf, recvRow, -1);
+    print_sent_message(recvBuf, recvRow, -1);
     
     recvRow += rows_needed;
     
