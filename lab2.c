@@ -165,7 +165,6 @@ int main()
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, timeout);
     if (transferred == sizeof(packet) || transferred == 0) {
-      printf("transferred: %d\n", transferred);
       //Checking for the rightmost key pressed, as that is the only one we may want to send.
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
@@ -196,7 +195,6 @@ int main()
         timeout = FIRST_TIMEOUT;
         //If the key is the same as the last key pressed, we check if it was held down
         if (memcmp(&packet, &prev, sizeof(struct usb_keyboard_packet)) == 0) {
-          printf("Key held down\n");
           timeout = SECOND_TIMEOUT;
           new = 1;
         }
@@ -377,7 +375,6 @@ void print_sent_message(char * message, int start_row, int cursor_pos, char r, c
     rows--;
   }
   //Clear the input section
-  printf("rows: %d\n", rows);
   for(int i = 0; i < rows; i++){
     int row = start_row + i;
     if(row >= USER_ROW-1){
@@ -399,7 +396,6 @@ void print_cursor(char* message,int start_row, int cursor_pos){
   int row = cursor_pos/ROW_WIDTH;
   int col = cursor_pos%ROW_WIDTH;
   if(start_row + row < 24){
-    printf("Printing Cursor...\n");
     fbputcharinv(message[cursor_pos], start_row + row, col,255,255,255);
   }
 }
