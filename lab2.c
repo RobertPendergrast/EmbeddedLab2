@@ -240,6 +240,7 @@ int main()
       print_message(message, USER_ROW, cursor_pos);
       
       print_cursor(message, USER_ROW, cursor_pos);
+      drawline(USER_ROW-1);
 
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
@@ -339,6 +340,8 @@ void print_message(char * message, int start_row, int cursor_pos){
   }
 }
 
+
+// This function is made just so we can have pretty colors. 
 void print_sent_message(char * message, int start_row, int cursor_pos){
   int rows = (strlen(message))/ROW_WIDTH + 1;
   //Clear the input section
