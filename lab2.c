@@ -415,6 +415,9 @@ void *network_thread_f(void *ignored)
   /* Receive data */
   while ((n = read(sockfd, &recvBuf, NETWORK_BUFFER_SIZE - 1)) > 0) {
     recvBuf[n] = '\0';
+    if(recvBuf[n-1] == '\n'){
+      recvBuf[n-1] = '\0';
+    }
     printf("%s\n", recvBuf);
     
     if(message_count % 2 == 0){
