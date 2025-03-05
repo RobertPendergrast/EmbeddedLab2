@@ -345,17 +345,25 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
 }
 
 void print_message(char * message, int start_row, int cursor_pos){
+  printf("Before Initial Clear Line\n");
   for(int i = 0; i < 2; i++){
-    //clearline(start_row+i);
+    clearline(start_row+i);
   }
+  printf("After Initial Clear Line\n");
   int rows = (strlen(message)-1)/ROW_WIDTH + 1;
+  printf("After STRLEN\n");
   //Clear the input section
   for(int i = 0; i < rows; i++){
     //clearline(start_row+i);
+    printf("Before Temp\n");
     char temp = message[(i+1)*ROW_WIDTH];
+    printf("After Temp\n");
     message[(i+1)*ROW_WIDTH] = '\0';
+    printf("After Message\n");
     fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,200,200,200);
+    printf("After fbputs\n");
     message[(i+1)*ROW_WIDTH] = temp;
+    printf("After Message\n");
   }
 }
 
