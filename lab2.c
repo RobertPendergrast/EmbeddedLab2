@@ -188,14 +188,26 @@ int main()
         
         if(new == 1){
           // //Checking for left and right arrows
-          if(packet.keycode[rightmost] == 0x50){
+          if(packet.keycode[rightmost] == 0x4F){
+            if(cursor_pos < len){
+              cursor_pos++;
+            }
+          }
+          else if(packet.keycode[rightmost] == 0x50){
             if(cursor_pos > 0){
               cursor_pos--;
             }
           }
-          else if(packet.keycode[rightmost] == 0x4F){
-            if(cursor_pos < len){
-              cursor_pos++;
+          else if(packet.keycode[rightmost] == 0x51){
+            cursor_pos+=ROW_WIDTH;
+            if(cursor_pos > len){
+              cursor_pos = len;
+            }
+          }
+          else if(packet.keycode[rightmost] == 0x52){
+            cursor_pos-=ROW_WIDTH;
+            if(cursor_pos < 0){
+              cursor_pos = 0;
             }
           }
           // Check for caps lock key
@@ -330,7 +342,7 @@ void print_message(char * message, int start_row, int cursor_pos){
   for(int i = 0; i < 2; i++){
     clearline(start_row+i);
   }
-  int rows = (strlen(message))/ROW_WIDTH + 1;
+  int rows = (strlen(message)-1)/ROW_WIDTH + 1;
   //Clear the input section
   for(int i = 0; i < rows; i++){
     //clearline(start_row+i);
@@ -344,16 +356,21 @@ void print_message(char * message, int start_row, int cursor_pos){
 
 // This function is made just so we can have pretty colors. 
 void print_sent_message(char * message, int start_row, int cursor_pos){
-  int rows = (strlen(message))/ROW_WIDTH + 1;
+  int rows = (strlen(message)-1)/ROW_WIDTH + 1;
   //Clear the input section
   for(int i = 0; i < rows; i++){
-    clearline(start_row+i);
+    int row = start_row + i;
+    if(row >= USER_ROW){
+      scroll_screen();
+      row = USER_ROW-1;
+    }
+    clearline(row);
     char temp = message[(i+1)*ROW_WIDTH];
     message[(i+1)*ROW_WIDTH] = '\0';
     if(message_count % 2 == 0){
-      fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,200,200,200);
+      fbputs(&(message[i*ROW_WIDTH]), row, 0,200,200,200);
     } else{
-      fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,240,200,150);
+      fbputs(&(message[i*ROW_WIDTH]), row, 0,240,200,150);
     }
     message[(i+1)*ROW_WIDTH] = temp;
   }
@@ -384,25 +401,13 @@ void *network_thread_f(void *ignored)
     printf("%s\n", recvBuf);
     message_count++;
     
-        // Calculate how many rows this message will need
-    int msg_len = strlen(recvBuf);
-    int rows_needed = (msg_len / ROW_WIDTH) + 1;
-    if(msg_len % ROW_WIDTH == 0) {
-      rows_needed--;
-    }
     
-    // Check if we need to wrap to the top
-    if (recvRow + rows_needed >= USER_ROW ) {
-      recvRow = 1;    }
-    
-    // Use the print_message function to display the message
-    // but we pass -1 as cursor_pos to prevent drawing a cursor
     print_sent_message(recvBuf, recvRow, -1);
     
     recvRow += rows_needed;
     
-    if (recvRow >= USER_ROW ) {
-      recvRow = 1;
+    if (recvRow > USER_ROW ) {
+      recvRow = USER_ROW;
     }
   }
 

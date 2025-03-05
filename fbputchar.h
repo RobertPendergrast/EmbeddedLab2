@@ -16,5 +16,6 @@ extern void drawline(int);
 extern void clearscreen();
 extern void clearline(int);
 extern void draw_cursor(int);
+void scroll_screen();
 
 #endif
