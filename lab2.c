@@ -242,24 +242,19 @@ int main()
       }
 
       
-      printf("after loop\n");
       prev = packet;
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      printf("aftersrintf\n");
       //printf("%s\n", keystate); //prints the keystate
       //printf("%s\n", message); //prints the message
       //fbputs(keystate, 6, 0); //places the keystate onto the screen
       
 
       print_message(message, USER_ROW, cursor_pos);
-      printf("Afterprintmessage\n");
       print_cursor(message, USER_ROW, cursor_pos);
 
-      printf("after prints\n");
       //Sketchy Bug Fix
       drawline(USER_ROW-1);
-      printf("after drawline\n");
 
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
@@ -345,13 +340,10 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
 }
 
 void print_message(char * message, int start_row, int cursor_pos){
-  printf("Before Initial Clear Line\n");
   for(int i = 0; i < 2; i++){
     clearline(start_row+i);
   }
-  printf("After Initial Clear Line\n");
   int rows = (strlen(message))/ROW_WIDTH + 1;
-  printf("After STRLEN\n");
   //Clear the input section
   for(int i = 0; i < rows; i++){
     //clearline(start_row+i);
@@ -411,7 +403,7 @@ void *network_thread_f(void *ignored)
     message_count++;
     
     
-    //print_sent_message(recvBuf, recvRow, -1);
+    print_sent_message(recvBuf, recvRow, -1);
     int rows_needed = (strlen(recvBuf))/ROW_WIDTH + 1;
     recvRow += rows_needed;
     
