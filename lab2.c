@@ -252,7 +252,9 @@ int main()
       //fbputs(keystate, 6, 0); //places the keystate onto the screen
       
 
+      printf("before printmessage\n");
       print_message(message, USER_ROW, cursor_pos);
+      printf("Afterprintmessage\n");
       print_cursor(message, USER_ROW, cursor_pos);
 
       printf("after prints\n");
