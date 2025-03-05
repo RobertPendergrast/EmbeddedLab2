@@ -338,7 +338,7 @@ void print_cursor(char* message,int start_row, int cursor_pos){
   printf("len: %d cursor: %d\n", strlen(message), cursor_pos);
   int row = (strlen(message))/ROW_WIDTH;
   int col = cursor_pos%ROW_WIDTH;
-  fbputs("|",start_row + row,col);
+  fbputs("▋",start_row + row,col);
 }
 
 void *network_thread_f(void *ignored)
