@@ -336,7 +336,7 @@ void print_message(char * message, int start_row, int cursor_pos){
 
 void print_cursor(char* message,int start_row, int cursor_pos){
   printf("len: %d cursor: %d\n", strlen(message), cursor_pos);
-  int row = (strlen(message))/ROW_WIDTH;
+  int row = cursor_pos/ROW_WIDTH;
   int col = cursor_pos%ROW_WIDTH;
   fbputs("|",start_row + row,col,255,255,255);
 }
