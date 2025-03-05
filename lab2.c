@@ -328,7 +328,7 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
 
 void print_message(char * message, int start_row, int cursor_pos){
   for(int i = 0; i < 2; i++){
-    clearline(start_row+i);
+    //clearline(start_row+i);
   }
   int rows = (strlen(message))/ROW_WIDTH + 1;
   //Clear the input section
@@ -367,7 +367,7 @@ void print_cursor(char* message,int start_row, int cursor_pos){
   int col = cursor_pos%ROW_WIDTH;
   if(start_row + row < 24){
     printf("Printing Cursor...\n");
-    //fbputcharinv(message[cursor_pos], start_row + row, col,255,255,255);
+    fbputcharinv(message[cursor_pos], start_row + row, col,255,255,255);
   }
 }
 
