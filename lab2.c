@@ -164,7 +164,8 @@ int main()
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, timeout);
-    if (transferred == sizeof(packet)) {
+    if (transferred == sizeof(packet) || transferred == 0) {
+      printf("transferred: %d\n", transferred);
       //Checking for the rightmost key pressed, as that is the only one we may want to send.
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
@@ -195,6 +196,7 @@ int main()
         timeout = FIRST_TIMEOUT;
         //If the key is the same as the last key pressed, we check if it was held down
         if (memcmp(&packet, &prev, sizeof(struct usb_keyboard_packet)) == 0) {
+          printf("Key held down\n");
           timeout = SECOND_TIMEOUT;
           new = 1;
         }
