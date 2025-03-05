@@ -165,6 +165,10 @@ int main()
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, timeout);
     if (transferred == sizeof(packet) || transferred == 0) {
+      if(packet.keycode[0] == 0x00){
+        timeout = FIRST_TIMEOUT;
+        break;
+      }
       //Checking for the rightmost key pressed, as that is the only one we may want to send.
       uint8_t rightmost = 0;
       for(int i = 0; i < 6; i++){
