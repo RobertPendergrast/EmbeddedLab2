@@ -183,8 +183,8 @@ void clearscreen(){
 
 void scroll_screen(){
   int bytes_per_line = fb_finfo.line_length * FONT_HEIGHT * 2;
-  for(int row = 1; row < 20; row++){
-    memcpy(framebuffer + (row-1) * bytes_per_line, framebuffer + row * bytes_per_line, bytes_per_line);
+  for(int row = 0; row < 20; row++){
+    memcpy(framebuffer + (row) * bytes_per_line, framebuffer + (row+1) * bytes_per_line, bytes_per_line);
   }
 }
 
