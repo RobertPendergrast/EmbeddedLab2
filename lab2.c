@@ -252,7 +252,6 @@ int main()
       //fbputs(keystate, 6, 0); //places the keystate onto the screen
       
 
-      printf("before printmessage\n");
       print_message(message, USER_ROW, cursor_pos);
       printf("Afterprintmessage\n");
       print_cursor(message, USER_ROW, cursor_pos);
@@ -347,7 +346,7 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
 
 void print_message(char * message, int start_row, int cursor_pos){
   for(int i = 0; i < 2; i++){
-    clearline(start_row+i);
+    //clearline(start_row+i);
   }
   int rows = (strlen(message)-1)/ROW_WIDTH + 1;
   //Clear the input section
