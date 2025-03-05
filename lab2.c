@@ -237,7 +237,7 @@ int main()
 
       print_message(message, USER_ROW, cursor_pos);
       
-      print_cursor(message, USER_ROW,cursor_pos);
+      print_cursor(message, USER_ROW, cursor_pos);
 
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
@@ -337,7 +337,7 @@ void print_message(char * message, int start_row, int cursor_pos){
 void print_cursor(char* message,int start_row, int cursor_pos){
   int row = (strlen(message))/ROW_WIDTH + 1;
   int col = cursor_pos/ROW_WIDTH + 1;
-  fbputs("|",row,col);
+  fbputs("|",start_row + row,col);
 }
 
 void *network_thread_f(void *ignored)
