@@ -196,6 +196,7 @@ int main()
         //If the key is the same as the last key pressed, we check if it was held down
         if (memcmp(&packet, &prev, sizeof(struct usb_keyboard_packet)) == 0) {
           timeout = SECOND_TIMEOUT;
+          printf("Key Held\n");
           new = 1;
         }
         if(new == 1){
