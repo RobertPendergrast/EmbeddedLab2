@@ -47,6 +47,7 @@ void *network_thread_f(void *);
 int execute_key(uint8_t key, uint8_t modifiers, int position, char * message, int len);
 void print_message(char * message, int start_row, int cursor_pos);
 void print_cursor(char * message, int start_row, int cursor_pos);
+void print_sent_message(char * message, int start_row, int cursor_pos, char r, char g, char b);
 
 // Add caps lock tracking variable
 int caps_lock_enabled = 0;  
@@ -356,7 +357,7 @@ void print_message(char * message, int start_row, int cursor_pos){
 
 
 // This function is made just so we can have pretty colors. 
-void print_sent_message(char * message, int start_row, int cursor_pos){
+void print_sent_message(char * message, int start_row, int cursor_pos, char r, char g, char b){
   message_count++;
   int rows = (strlen(message)-1)/ROW_WIDTH + 1;
   //Clear the input section
@@ -369,11 +370,7 @@ void print_sent_message(char * message, int start_row, int cursor_pos){
     clearline(row);
     char temp = message[(i+1)*ROW_WIDTH];
     message[(i+1)*ROW_WIDTH] = '\0';
-    if(message_count % 2 == 0){
-      fbputs(&(message[i*ROW_WIDTH]), row, 0,200,200,200);
-    } else{
-      fbputs(&(message[i*ROW_WIDTH]), row, 0,240,200,150);
-    }
+    fbputs(&(message[i*ROW_WIDTH]), row, 0,r,g,b);
     message[(i+1)*ROW_WIDTH] = temp;
   }
 }
@@ -402,8 +399,11 @@ void *network_thread_f(void *ignored)
     recvBuf[n] = '\0';
     printf("%s\n", recvBuf);
     
-    
-    print_sent_message(recvBuf, recvRow, -1);
+    if(message_count % 2 == 0){
+      print_sent_message(recvBuf, recvRow, -1, 200, 200, 200);
+    } else{
+      print_sent_message(recvBuf, recvRow, -1, 240, 200, 150);
+    }
     int rows_needed = (strlen(recvBuf))/ROW_WIDTH + 1;
     recvRow += rows_needed;
     
