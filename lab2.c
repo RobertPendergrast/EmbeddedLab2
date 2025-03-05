@@ -37,6 +37,8 @@
 
 int sockfd; /* Socket file descriptor */
 
+int message_count = 0;
+
 struct libusb_device_handle *keyboard;
 uint8_t endpoint_address;
 
@@ -332,7 +334,7 @@ void print_message(char * message, int start_row, int cursor_pos){
     clearline(start_row+i);
     char temp = message[(i+1)*ROW_WIDTH];
     message[(i+1)*ROW_WIDTH] = '\0';
-    if(start_row % 2 == 0){
+    if(message_count % 2 == 0){
       fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,200,200,200);
     } else{
       fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,240,200,150);
@@ -358,6 +360,7 @@ void *network_thread_f(void *ignored)
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
     recvBuf[n] = '\0';
     printf("%s\n", recvBuf);
+    message_count++;
     
         // Calculate how many rows this message will need
     int msg_len = strlen(recvBuf);
