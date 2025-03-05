@@ -24,7 +24,7 @@
 #define RSHIFT 0x20
 #define HOLD_COUNT 50
 #define BUFFER_SIZE 129
-#define USER_ROW 20
+#define USER_ROW 21
 
 /*
  * References:
