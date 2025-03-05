@@ -359,8 +359,12 @@ void print_message(char * message, int start_row, int cursor_pos){
 // This function is made just so we can have pretty colors. 
 void print_sent_message(char * message, int start_row, int cursor_pos, char r, char g, char b){
   message_count++;
-  int rows = (strlen(message)-1)/ROW_WIDTH + 1;
+  int rows = (strlen(message))/ROW_WIDTH + 1;
+  if(strlen(message) % ROW_WIDTH == 0){
+    rows--;
+  }
   //Clear the input section
+  printf("rows: %d\n", rows);
   for(int i = 0; i < rows; i++){
     int row = start_row + i;
     if(row >= USER_ROW-1){
