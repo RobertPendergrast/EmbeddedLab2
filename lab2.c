@@ -328,12 +328,12 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
 
 void print_message(char * message, int start_row, int cursor_pos){
   for(int i = 0; i < 2; i++){
-    //clearline(start_row+i);
+    clearline(start_row+i);
   }
   int rows = (strlen(message))/ROW_WIDTH + 1;
   //Clear the input section
   for(int i = 0; i < rows; i++){
-    clearline(start_row+i);
+    //clearline(start_row+i);
     char temp = message[(i+1)*ROW_WIDTH];
     message[(i+1)*ROW_WIDTH] = '\0';
     fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,200,200,200);
