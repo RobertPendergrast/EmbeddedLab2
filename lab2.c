@@ -327,7 +327,7 @@ int execute_key(uint8_t key, uint8_t modifiers, int position, char* message, int
 }
 
 void print_message(char * message, int start_row, int cursor_pos){
-  for(int i = 0; i < 4; i++){
+  for(int i = 0; i < 2; i++){
     clearline(start_row+i);
   }
   int rows = (strlen(message))/ROW_WIDTH + 1;
