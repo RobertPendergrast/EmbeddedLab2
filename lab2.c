@@ -365,7 +365,7 @@ void print_cursor(char* message,int start_row, int cursor_pos){
   printf("len: %d cursor: %d\n", strlen(message), cursor_pos);
   int row = cursor_pos/ROW_WIDTH;
   int col = cursor_pos%ROW_WIDTH;
-  if(cursor_pos < 127){
+  if(cursor_pos < 126){
     fbputcharinv(message[cursor_pos], start_row + row, col,255,255,255);
   }
 }
