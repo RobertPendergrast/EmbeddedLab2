@@ -224,7 +224,6 @@ int main()
             message[0] = '\0';
             len = 0;
             cursor_pos = 0;
-            printf("after all\n");
           }
           else{
             //execute the key
@@ -243,9 +242,11 @@ int main()
       }
 
       
+      printf("after loop\n");
       prev = packet;
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
+      printf("aftersrintf\n");
       //printf("%s\n", keystate); //prints the keystate
       //printf("%s\n", message); //prints the message
       //fbputs(keystate, 6, 0); //places the keystate onto the screen
@@ -254,8 +255,10 @@ int main()
       print_message(message, USER_ROW, cursor_pos);
       print_cursor(message, USER_ROW, cursor_pos);
 
+      printf("after prints\n");
       //Sketchy Bug Fix
       drawline(USER_ROW-1);
+      printf("after drawline\n");
 
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
