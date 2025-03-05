@@ -109,7 +109,7 @@ int main()
     fbputchar('*', 23, col,255,0,255);
   }
 
-  fbputs("Hello CSEE 4840 World!", 4, 10);
+  //fbputs("Hello CSEE 4840 World!", 4, 10);
   
   //Testing the drawline and clear screen functions
   clearscreen();   
@@ -329,7 +329,7 @@ void print_message(char * message, int start_row, int cursor_pos){
     clearline(start_row+i);
     char temp = message[(i+1)*ROW_WIDTH];
     message[(i+1)*ROW_WIDTH] = '\0';
-    fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0);
+    fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,64,64,64);
     message[(i+1)*ROW_WIDTH] = temp;
   }
 }
@@ -338,7 +338,7 @@ void print_cursor(char* message,int start_row, int cursor_pos){
   printf("len: %d cursor: %d\n", strlen(message), cursor_pos);
   int row = (strlen(message))/ROW_WIDTH;
   int col = cursor_pos%ROW_WIDTH;
-  fbputs("█",start_row + row,col);
+  fbputs("|",start_row + row,col,0,0,0);
 }
 
 void *network_thread_f(void *ignored)
