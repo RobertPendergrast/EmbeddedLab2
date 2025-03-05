@@ -403,7 +403,7 @@ void *network_thread_f(void *ignored)
     
     
     print_sent_message(recvBuf, recvRow, -1);
-    rows_needed = (strlen(recvBuf)-1)/ROW_WIDTH + 1;
+    int rows_needed = (strlen(recvBuf)-1)/ROW_WIDTH + 1;
     recvRow += rows_needed;
     
     if (recvRow > USER_ROW ) {
