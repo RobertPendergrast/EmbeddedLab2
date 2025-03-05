@@ -209,7 +209,6 @@ int main()
         //If the key is the same as the last key pressed, we check if it was held down
         if (memcmp(&packet, &prev, sizeof(struct usb_keyboard_packet)) == 0) {
           timeout = SECOND_TIMEOUT;
-          printf("Key Held\n");
           new = 1;
         }
         if(new == 1){
@@ -406,7 +405,6 @@ void print_sent_message(char * message, int start_row, int cursor_pos, char r, c
 
 //printing the cursor
 void print_cursor(char* message,int start_row, int cursor_pos){
-  printf("len: %d cursor: %d\n", strlen(message), cursor_pos);
   int row = cursor_pos/ROW_WIDTH;
   int col = cursor_pos%ROW_WIDTH;
   if(start_row + row < 24){
