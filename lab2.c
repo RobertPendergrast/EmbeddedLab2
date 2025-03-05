@@ -217,12 +217,11 @@ int main()
           }
           //press enter
           else if(packet.keycode[rightmost] == 0x28 && packet.modifiers == 0){
-            printf("before sent\n");
             write(sockfd, message, len);
-            printf("Sent message: %s\n", message);
             for(int i = 0; i < (BUFFER_SIZE/ROW_WIDTH-1)+1; i++){
               clearline(USER_ROW + i);
             }
+            printf("after write\n");
             message[0] = '\0';
             len = 0;
             cursor_pos = 0;
