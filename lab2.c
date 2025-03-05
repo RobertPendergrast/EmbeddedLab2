@@ -24,6 +24,7 @@
 #define RSHIFT 0x20
 #define HOLD_COUNT 50
 #define BUFFER_SIZE 129
+#define NETWORK_BUFFER_SIZE 200
 #define USER_ROW 22
 
 /*
@@ -399,7 +400,7 @@ void *network_thread_f(void *ignored)
   int recvRow = 0;
   
   /* Receive data */
-  while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
+  while ((n = read(sockfd, &recvBuf, NETWORK_BUFFER_SIZE - 1)) > 0) {
     recvBuf[n] = '\0';
     printf("%s\n", recvBuf);
     
