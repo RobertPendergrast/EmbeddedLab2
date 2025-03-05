@@ -335,7 +335,7 @@ void print_message(char * message, int start_row, int cursor_pos){
     if(i % 2 == 0){
       fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,200,200,200);
     } else{
-      fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,230,230,230);
+      fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0,173,216,230);
     }
     message[(i+1)*ROW_WIDTH] = temp;
   }
