@@ -24,7 +24,7 @@
 #define RSHIFT 0x20
 #define HOLD_COUNT 50
 #define BUFFER_SIZE 129
-#define USER_ROW 18
+#define USER_ROW 20
 
 /*
  * References:
@@ -65,14 +65,14 @@ static const char keycode_to_ascii[128] = {
 
 
 static const char keycode_to_ascii_caps_lock[128] = {
-    0,   0,   0,   0,  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'l',  // 0x00-0x0Fl
+    0,   0,   0,   0,  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',  // 0x00-0x0Fl
     'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2',  // 0x10-0x1F
     '3', '4', '5', '6', '7', '8', '9', '0', '\n', 0,   0,   0,   ' ', '-', '=', '[',  // 0x20-0x2F
     ']', '\\', 0,  ';', '\'', '`', ',', '.', '/',  0,   0,   0,   0,   0,   0,   0,   // 0x30-0x3F
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x40-0x4F
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x50-0x5F
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   // 0x60-0x6F
-    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0    // 0x70-0x7F
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0    // 0x70-0x7F 
 };
 
 
@@ -238,8 +238,9 @@ int main()
       
 
       print_message(message, USER_ROW, cursor_pos);
-      
       print_cursor(message, USER_ROW, cursor_pos);
+
+      //Sketchy Bug Fix
       drawline(USER_ROW-1);
 
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
@@ -358,12 +359,15 @@ void print_sent_message(char * message, int start_row, int cursor_pos){
   }
 }
 
+
+//printing the cursor
 void print_cursor(char* message,int start_row, int cursor_pos){
   printf("len: %d cursor: %d\n", strlen(message), cursor_pos);
   int row = cursor_pos/ROW_WIDTH;
   int col = cursor_pos%ROW_WIDTH;
   fbputs("|",start_row + row,col,255,255,255);
 }
+
 
 void *network_thread_f(void *ignored)
 {
