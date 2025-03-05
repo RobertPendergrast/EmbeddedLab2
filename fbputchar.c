@@ -109,6 +109,9 @@ void fbputchar(char c, int row, int col,int r, int g, int b)
  */
 void fbputcharinv(char c, int row, int col,int r, int g, int b)
 {
+  if(c == '\0'){
+    c = ' ';
+  }
   int x, y;
   unsigned char pixels, *pixelp = font + FONT_HEIGHT * c;
   unsigned char mask;
