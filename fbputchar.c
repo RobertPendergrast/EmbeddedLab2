@@ -103,7 +103,53 @@ void fbputchar(char c, int row, int col,int r, int g, int b)
   }
 }
 
-
+/*
+ * Draw the given character at the given row/column.
+ * fbopen() must be called first.
+ */
+void fbputcharinv(char c, int row, int col,int r, int g, int b)
+{
+  int x, y;
+  unsigned char pixels, *pixelp = font + FONT_HEIGHT * c;
+  unsigned char mask;
+  unsigned char *pixel, *left = framebuffer +
+    (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
+    (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  for (y = 0 ; y < FONT_HEIGHT * 2 ; y++, left += fb_finfo.line_length) {
+    pixels = *pixelp;
+    pixel = left;
+    mask = 0x80;
+    for (x = 0 ; x < FONT_WIDTH ; x++) {
+      if (pixels & mask) {	
+	      
+        pixel[0] = 0;
+        pixel[1] = 0;
+        pixel[2] = 0;
+        pixel[3] = 0;
+      } else {
+	      pixel[0] = r; /* Red */
+        pixel[1] = g; /* Green */
+        pixel[2] = b; /* Blue */
+        pixel[3] = 0;
+      }
+      pixel += 4;
+      if (pixels & mask) {
+	      pixel[0] = 0;
+        pixel[1] = 0;
+        pixel[2] = 0;
+        pixel[3] = 0;
+      } else {
+	      pixel[0] = r; /* Red */
+        pixel[1] = g; /* Green */
+        pixel[2] = b; /* Blue */
+        pixel[3] = 0;
+      }
+      pixel += 4;
+      mask >>= 1;
+    }
+    if (y & 0x1) pixelp++;
+  }
+}
 //Draw Line Function: This will draw a row of astrics given a row #
 void drawline(int row){
   for (int col = 0 ; col < 64 ; col++) {
