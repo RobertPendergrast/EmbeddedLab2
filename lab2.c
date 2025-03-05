@@ -44,7 +44,7 @@ pthread_t network_thread;
 void *network_thread_f(void *);
 int execute_key(uint8_t key, uint8_t modifiers, int position, char * message, int len);
 void print_message(char * message, int start_row, int cursor_pos);
-void print_cursor(int start_row, int cursor_pos);
+void print_cursor(char * message, int start_row, int cursor_pos);
 
 // Add caps lock tracking variable
 int caps_lock_enabled = 0;  
@@ -237,7 +237,7 @@ int main()
 
       print_message(message, USER_ROW, cursor_pos);
       
-      print_cursor(USER_ROW,cursor_pos);
+      print_cursor(message, USER_ROW,cursor_pos);
 
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
@@ -334,9 +334,10 @@ void print_message(char * message, int start_row, int cursor_pos){
   }
 }
 
-void print_cursor(int start_row, int cursor_pos){
-  int location = start_row*ROW_WIDTH + cursor_pos;
-  fbputs("|",location,0);
+void print_cursor(char* message,int start_row, int cursor_pos){
+  int row = (strlen(message))/ROW_WIDTH + 1;
+  int col = cursor_pos/ROW_WIDTH + 1;
+  fbputs("|",row,col);
 }
 
 void *network_thread_f(void *ignored)
