@@ -26,8 +26,8 @@
 #define BUFFER_SIZE 129
 #define NETWORK_BUFFER_SIZE 200
 #define USER_ROW 22
-#define FIRST_TIMEOUT 600
-#define SECOND_TIMEOUT 100
+#define FIRST_TIMEOUT 500
+#define SECOND_TIMEOUT 50
 
 /*
  * References:
