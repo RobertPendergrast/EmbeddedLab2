@@ -2,7 +2,7 @@
  *
  * CSEE 4840 Lab 2 for 2019
  *
- * Name/UNI: Robert Pendergrast, Moises Mata, Isaac Trost
+ * Name/UNI: Robert Pendergrast (rlp2153), Moises Mata (mm6155), Isaac Trost (wit2102)
  */
 #include "fbputchar.h"
 #include <stdio.h>
@@ -44,6 +44,7 @@ pthread_t network_thread;
 void *network_thread_f(void *);
 int execute_key(uint8_t key, uint8_t modifiers, int position, char * message, int len);
 void print_message(char * message, int start_row, int cursor_pos);
+void print_cursor(int start_row, int cursor_pos);
 
 // Add caps lock tracking variable
 int caps_lock_enabled = 0;  
@@ -231,11 +232,13 @@ int main()
 	      packet.keycode[1]);
       //printf("%s\n", keystate); //prints the keystate
       //printf("%s\n", message); //prints the message
-      fbputs(keystate, 6, 0); //places the keystate onto the screen
+      //fbputs(keystate, 6, 0); //places the keystate onto the screen
       
 
       print_message(message, USER_ROW, cursor_pos);
       
+      print_cursor(USER_ROW,cursor_pos);
+
       //fbputs(" ",cursor_row,cursor_col-1); //render cursor
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	      break;
@@ -329,8 +332,11 @@ void print_message(char * message, int start_row, int cursor_pos){
     fbputs(&(message[i*ROW_WIDTH]), start_row + i, 0);
     message[(i+1)*ROW_WIDTH] = temp;
   }
-  draw_cursor(cursor_pos);
-  //
+}
+
+void print_cursor(int start_row, int cursor_pos){
+  int location = start_row*ROW_WIDTH + cursor_pos;
+  fbputs("|",location,0);
 }
 
 void *network_thread_f(void *ignored)
