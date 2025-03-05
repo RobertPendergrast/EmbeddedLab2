@@ -26,6 +26,8 @@
 #define BUFFER_SIZE 129
 #define NETWORK_BUFFER_SIZE 200
 #define USER_ROW 22
+#define FIRST_TIMEOUT 600
+#define SECOND_TIMEOUT 100
 
 /*
  * References:
@@ -157,11 +159,11 @@ int main()
   char message[BUFFER_SIZE] = {0}; // Initialize all elements to zero
   /* Look for and handle keypresses */
 
-  
+  int timeout = FIRST_TIMEOUT;
   for (;;) {
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
-			      &transferred, 0);
+			      &transferred, timeout);
     if (transferred == sizeof(packet)) {
       //Checking for the rightmost key pressed, as that is the only one we may want to send.
       uint8_t rightmost = 0;
@@ -171,6 +173,9 @@ int main()
         }
         rightmost = i+1;
       }
+
+      // Check if the new packet is exactly the same as the old one
+      
       //If no key is pressed, we skip the rest of the loop
       if(rightmost != 0){
         //decrementing the rightmost key to get the last key pressed
@@ -187,7 +192,12 @@ int main()
             break;
           }
         }
-        
+        timeout = FIRST_TIMEOUT;
+        //If the key is the same as the last key pressed, we check if it was held down
+        if (memcmp(&packet, &prev, sizeof(struct usb_keyboard_packet)) == 0) {
+          timeout = SECOND_TIMEOUT;
+          new = 1;
+        }
         if(new == 1){
           // //Checking for left and right arrows
           if(packet.keycode[rightmost] == 0x4F){
