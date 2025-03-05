@@ -160,6 +160,14 @@ int main()
   /* Look for and handle keypresses */
 
   int timeout = FIRST_TIMEOUT;
+  packet.modifiers = 0;
+  packet.keycode[0] = 0;
+  packet.keycode[1] = 0;
+  packet.keycode[2] = 0;
+  packet.keycode[3] = 0;
+  packet.keycode[4] = 0;
+  packet.keycode[5] = 0;
+
   for (;;) {
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
