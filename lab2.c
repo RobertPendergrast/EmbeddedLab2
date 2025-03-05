@@ -361,9 +361,9 @@ void print_sent_message(char * message, int start_row, int cursor_pos){
   //Clear the input section
   for(int i = 0; i < rows; i++){
     int row = start_row + i;
-    if(row >= USER_ROW){
+    if(row >= USER_ROW-1){
       scroll_screen();
-      row = USER_ROW-1;
+      row = USER_ROW-2;
     }
     clearline(row);
     char temp = message[(i+1)*ROW_WIDTH];
