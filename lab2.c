@@ -357,6 +357,7 @@ void print_message(char * message, int start_row, int cursor_pos){
 
 // This function is made just so we can have pretty colors. 
 void print_sent_message(char * message, int start_row, int cursor_pos){
+  message_count++;
   int rows = (strlen(message)-1)/ROW_WIDTH + 1;
   //Clear the input section
   for(int i = 0; i < rows; i++){
@@ -400,7 +401,6 @@ void *network_thread_f(void *ignored)
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
     recvBuf[n] = '\0';
     printf("%s\n", recvBuf);
-    message_count++;
     
     
     print_sent_message(recvBuf, recvRow, -1);

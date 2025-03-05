@@ -187,8 +187,6 @@ void scroll_screen(){
     memcpy(framebuffer + (row) * bytes_per_line, framebuffer + (row+1) * bytes_per_line, bytes_per_line);
   }
 }
-
-
 /*
  * Draw the given string at the given row/column.
  * String must fit on a single line: wrap-around is not handled.
