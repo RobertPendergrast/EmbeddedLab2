@@ -221,10 +221,10 @@ int main()
             for(int i = 0; i < (BUFFER_SIZE/ROW_WIDTH-1)+1; i++){
               clearline(USER_ROW + i);
             }
-            printf("after write\n");
             message[0] = '\0';
             len = 0;
             cursor_pos = 0;
+            printf("after all\n");
           }
           else{
             //execute the key
