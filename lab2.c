@@ -167,6 +167,7 @@ int main()
     if (transferred == sizeof(packet) || transferred == 0) {
       if(packet.keycode[0] == 0x00){
         timeout = FIRST_TIMEOUT;
+        prev = packet;
         continue;
       }
       //Checking for the rightmost key pressed, as that is the only one we may want to send.
